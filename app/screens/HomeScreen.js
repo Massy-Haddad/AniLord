@@ -12,9 +12,15 @@ import {
   Platform,
   StatusBar,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { SimpleLineIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { SharedElement } from "react-navigation-shared-element";
 import * as Animatable from "react-native-animatable";
+
+import styled, { ThemeProvider } from "styled-components";
+import { useSelector, useDispatch } from "react-redux";
+import { switchTheme } from "../redux/themeActions";
+import { lightTheme, darkTheme } from "../../Theme";
+
 import SearchBar from "../components/SearchBar";
 
 const { width } = Dimensions.get("screen");
@@ -22,6 +28,9 @@ const ITEM_WIDTH = width * 0.9;
 const ITEM_HEIGHT = ITEM_WIDTH * 0.9;
 
 export default function HomeScreen({ navigation }) {
+  const theme = useSelector((state) => state.themeReducer.theme);
+  const dispatch = useDispatch();
+
   const [trending, setTrending] = useState([]);
   const [season, setSeason] = useState([]);
   const [nextSeason, setNextSeason] = useState([]);
@@ -175,7 +184,9 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           activeOpacity={0.8}
           style={{ marginBottom: 14 }}
-          onPress={() => navigation.navigate("DetailScreen", { item })}
+          onPress={() =>
+            navigation.navigate("DetailScreen", { item, theme, dispatch })
+          }
         >
           <SharedElement id={`item.${item.id}.image_url`}>
             <Image
@@ -238,72 +249,122 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: "#0f0f0f",
-        paddingTop: StatusBar.currentHeight,
-      }}
-    >
-      {/* Status bar */}
-      <StatusBar barStyle="light-content" backgroundColor="#0f0f0f" />
-      {/* Header */}
-      <View
-        style={{
-          marginBottom: 10,
-          marginHorizontal: 12,
-        }}
-      >
-        {/*
+    <ThemeProvider theme={theme}>
+      <SafeAreaViewContainer>
+        {/* Status bar */}
+        <StatusBar
+          barStyle={theme.STATUS_BAR_STYLE}
+          backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
+        />
+
+        {/* TEST THEME */}
+        {theme.mode === "light" ? (
+          <MaterialCommunityIcons
+            name="ghost"
+            size={28}
+            color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+            style={{
+              position: "absolute",
+              top: 20,
+              right: 20,
+              zIndex: 2,
+              //backgroundColor: "lightgrey",
+              //borderRadius: 50,
+              //padding: 3,
+            }}
+            onPress={() => dispatch(switchTheme(darkTheme))}
+          />
+        ) : (
+          <MaterialCommunityIcons
+            name="fire"
+            size={28}
+            color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+            style={{
+              position: "absolute",
+              top: 20,
+              right: 20,
+              zIndex: 2,
+              //backgroundColor: "lightgrey",
+              //borderRadius: 50,
+              //padding: 3,
+            }}
+            onPress={() => dispatch(switchTheme(lightTheme))}
+          />
+        )}
+        {/* Header */}
+        <View
+          style={{
+            marginBottom: 10,
+            marginHorizontal: 18,
+          }}
+        >
+          {/*
         <Text style={{ color: "#888", textTransform: "uppercase" }}>
           AniList client
         </Text>
         */}
-        <Text style={{ color: "#fff", fontSize: 32, fontWeight: "600" }}>
-          Discover
-        </Text>
-      </View>
-      <View style={{ marginRight: 20, marginLeft: 20 }}>
-        <SearchBar />
-      </View>
+          <Text
+            style={{
+              color: theme.PRIMARY_TEXT_COLOR,
+              fontSize: 32,
+              fontWeight: "600",
+            }}
+          >
+            Discover
+          </Text>
+        </View>
+        <View style={{ marginRight: 20, marginLeft: 20 }}>
+          <SearchBar />
+        </View>
 
-      {/* Scrollable content */}
-      <View style={{ flex: 1, padding: 20 }}>
-        <Text
-          style={{
-            color: "#888",
-            textTransform: "uppercase",
-            marginBottom: 12,
-            fontSize: 16,
-          }}
-        >
-          Trending now
-        </Text>
-        <FlatList
-          horizontal={true}
-          data={trending}
-          keyExtractor={(item) => item.id.toString()}
-          key={(item) => item.id.toString()}
-          renderItem={renderItem}
-        />
+        {/* Scrollable content */}
+        <View style={{ flex: 1, padding: 20 }}>
+          <Text
+            style={{
+              color: theme.SECONDARY_TEXT_COLOR,
+              textTransform: "uppercase",
+              marginBottom: 12,
+              fontSize: 16,
+            }}
+          >
+            Trending now
+          </Text>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={trending}
+            keyExtractor={(item) => item.id.toString()}
+            key={(item) => item.id.toString()}
+            renderItem={renderItem}
+          />
 
-        <Text
-          style={{
-            color: "#888",
-            textTransform: "uppercase",
-            marginBottom: 12,
-          }}
-        >
-          Upcoming season
-        </Text>
-        <FlatList
-          horizontal={true}
-          data={nextSeason}
-          keyExtractor={(item) => item.id.toString()}
-          key={(item) => item.id.toString()}
-          renderItem={renderItem}
-        />
-      </View>
-    </SafeAreaView>
+          <Text
+            style={{
+              color: theme.SECONDARY_TEXT_COLOR,
+              textTransform: "uppercase",
+              marginBottom: 12,
+            }}
+          >
+            Upcoming season
+          </Text>
+          <FlatList
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            data={nextSeason}
+            keyExtractor={(item) => item.id.toString()}
+            key={(item) => item.id.toString()}
+            renderItem={renderItem}
+          />
+        </View>
+      </SafeAreaViewContainer>
+    </ThemeProvider>
   );
 }
+
+const SafeAreaViewContainer = styled.SafeAreaView`
+  flex: 1;
+  background-color: ${(props) => props.theme.PRIMARY_BACKGROUND_COLOR};
+  padding-top: 20;
+`;
+
+// paddingTop was StatusBar.currentHeight

@@ -19,5 +19,5 @@ export const lightTheme = {
   PRIMARY_BUTTON_COLOR: "#fbfbfb",
   PRIMARY_BUTTON_TEXT_COLOR: "#748899",
 
-  STATUS_BAR_STYLE: "default",
+  STATUS_BAR_STYLE: "dark-content",
 };
