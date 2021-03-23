@@ -21,7 +21,7 @@ function SettingsScreen() {
   );
 }
 
-function OptionsScreen() {
+function SearchScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Options!</Text>
@@ -40,6 +40,18 @@ function MyTabs() {
           tabBarIcon: () => (
             <View style={{}}>
               <FontAwesome5 name="home" size={24} color="#CDCCCE" />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SearchScreen"
+        component={SearchScreen}
+        options={{
+          title: "",
+          tabBarIcon: () => (
+            <View style={{}}>
+              <FontAwesome5 name="search" size={24} color="#CDCCCE" />
             </View>
           ),
         }}
@@ -64,8 +76,6 @@ export default function RootNavigator() {
     <NavigationContainer>
       <Stack.Navigator headerMode="none" initialRouteName="Tabs">
         <Stack.Screen name="Tabs" component={MyTabs} options={() => options} />
-
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
 
         <Stack.Screen
           name="DetailScreen"
