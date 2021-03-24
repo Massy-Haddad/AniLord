@@ -10,53 +10,19 @@ import { createSharedElementStackNavigator } from "react-navigation-shared-eleme
 import HomeScreen from "../screens/HomeScreen";
 import DetailScreen from "../screens/DetailScreen";
 
-const Stack = createSharedElementStackNavigator();
-const Tab = createBottomTabNavigator();
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
 function SearchScreen() {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Options!</Text>
+      <Text>Search page, in work</Text>
     </View>
   );
 }
 
-function MyTabs() {
+function ProfileScreen() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="HomeScreen"
-        component={HomeScreen}
-        options={{
-          title: "",
-          tabBarIcon: () => (
-            <View style={{}}>
-              <FontAwesome5 name="home" size={24} color="#CDCCCE" />
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="SearchScreen"
-        component={SearchScreen}
-        options={{
-          title: "",
-          tabBarIcon: () => (
-            <View style={{}}>
-              <FontAwesome5 name="search" size={24} color="#CDCCCE" />
-            </View>
-          ),
-        }}
-      />
-    </Tab.Navigator>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>Profile page, in work</Text>
+    </View>
   );
 }
 
@@ -71,18 +37,85 @@ const options = {
   },
 };
 
+const name = "BottomTabs";
+
+const BottomTab = createBottomTabNavigator();
+
+const Stack1 = createSharedElementStackNavigator({
+  name,
+  debug: true,
+});
+
+const Stack2 = createSharedElementStackNavigator({
+  name,
+  debug: true,
+});
+
+const Stack3 = createSharedElementStackNavigator({
+  name,
+  debug: true,
+});
+
+const Home = () => (
+  <Stack1.Navigator headerMode="none">
+    <Stack1.Screen name={name} component={HomeScreen} />
+    <Stack1.Screen
+      name="DetailScreen"
+      component={DetailScreen}
+      options={() => options}
+    />
+  </Stack1.Navigator>
+);
+
+const Search = () => (
+  <Stack2.Navigator headerMode="none">
+    <Stack2.Screen name={name} component={SearchScreen} />
+  </Stack2.Navigator>
+);
+
+const Profile = () => (
+  <Stack2.Navigator headerMode="none">
+    <Stack2.Screen name={name} component={ProfileScreen} />
+  </Stack2.Navigator>
+);
+
 export default function RootNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator headerMode="none" initialRouteName="Tabs">
-        <Stack.Screen name="Tabs" component={MyTabs} options={() => options} />
-
-        <Stack.Screen
-          name="DetailScreen"
-          component={DetailScreen}
-          options={() => options}
+      <BottomTab.Navigator>
+        <BottomTab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: "HOME",
+            tabBarIcon: () => (
+              <FontAwesome5 name="home" size={24} color="#CDCCCE" />
+            ),
+          }}
         />
-      </Stack.Navigator>
+
+        <BottomTab.Screen
+          name="Search"
+          component={Search}
+          options={{
+            title: "SEARCH",
+            tabBarIcon: () => (
+              <FontAwesome5 name="search" size={20} color="#CDCCCE" />
+            ),
+          }}
+        />
+
+        <BottomTab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            title: "PROFILE",
+            tabBarIcon: () => (
+              <FontAwesome5 name="user-circle" size={24} color="#CDCCCE" />
+            ),
+          }}
+        />
+      </BottomTab.Navigator>
     </NavigationContainer>
   );
 }
