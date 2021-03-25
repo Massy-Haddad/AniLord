@@ -21,8 +21,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { switchTheme } from "../redux/themeActions";
 import { lightTheme, darkTheme } from "../../Theme";
 
-import SearchBar from "../components/SearchBar";
-
 const { width } = Dimensions.get("screen");
 const ITEM_WIDTH = width * 0.9;
 const ITEM_HEIGHT = ITEM_WIDTH * 0.9;
@@ -265,7 +263,7 @@ export default function HomeScreen({ navigation }) {
             color={theme.PRIMARY_BUTTON_TEXT_COLOR}
             style={{
               position: "absolute",
-              top: 20,
+              top: 50,
               right: 20,
               zIndex: 2,
               //backgroundColor: "lightgrey",
@@ -281,7 +279,7 @@ export default function HomeScreen({ navigation }) {
             color={theme.PRIMARY_BUTTON_TEXT_COLOR}
             style={{
               position: "absolute",
-              top: 20,
+              top: 50,
               right: 20,
               zIndex: 2,
               //backgroundColor: "lightgrey",
@@ -294,7 +292,6 @@ export default function HomeScreen({ navigation }) {
         {/* Header */}
         <View
           style={{
-            marginBottom: 10,
             marginHorizontal: 18,
           }}
         >
@@ -313,9 +310,9 @@ export default function HomeScreen({ navigation }) {
             Discover
           </Text>
         </View>
-        <View style={{ marginRight: 20, marginLeft: 20 }}>
+        {/* <View style={{ marginRight: 20, marginLeft: 20 }}>
           <SearchBar />
-        </View>
+        </View> */}
 
         {/* Scrollable content */}
         <View style={{ flex: 1, padding: 20 }}>
@@ -364,7 +361,7 @@ export default function HomeScreen({ navigation }) {
 const SafeAreaViewContainer = styled.SafeAreaView`
   flex: 1;
   background-color: ${(props) => props.theme.PRIMARY_BACKGROUND_COLOR};
-  padding-top: 20;
+  padding-top: 42;
 `;
 
 // paddingTop was StatusBar.currentHeight

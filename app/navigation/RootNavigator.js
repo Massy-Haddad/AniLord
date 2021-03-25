@@ -9,14 +9,7 @@ import { createSharedElementStackNavigator } from "react-navigation-shared-eleme
 
 import HomeScreen from "../screens/HomeScreen";
 import DetailScreen from "../screens/DetailScreen";
-
-function SearchScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text>Search page, in work</Text>
-    </View>
-  );
-}
+import SearchScreen from "../screens/SearchScreen";
 
 function ProfileScreen() {
   return (
