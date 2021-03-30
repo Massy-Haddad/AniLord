@@ -75,14 +75,34 @@ const Profile = () => (
 export default function RootNavigator() {
   return (
     <NavigationContainer>
-      <BottomTab.Navigator>
+      <BottomTab.Navigator
+        tabBarOptions={{
+          showLabel: false,
+          style: {
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            elevation: 0,
+            backgroundColor: "white",
+            borderTopColor: "transparent",
+            height: 80,
+          },
+        }}
+      >
         <BottomTab.Screen
           name="Home"
           component={Home}
           options={{
-            title: "HOME",
-            tabBarIcon: () => (
-              <FontAwesome5 name="home" size={24} color="#CDCCCE" />
+            tabBarIcon: ({ focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <FontAwesome5
+                  name="home"
+                  size={24}
+                  color="#CDCCCE"
+                  style={{ tintColor: "blue" }}
+                />
+              </View>
             ),
           }}
         />

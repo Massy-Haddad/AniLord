@@ -58,7 +58,7 @@ const DetailScreen = ({ navigation, route }) => {
           color="#fff"
           style={{
             position: "absolute",
-            top: 20,
+            top: 40,
             right: 20,
             zIndex: 2,
             //backgroundColor: "lightgrey",

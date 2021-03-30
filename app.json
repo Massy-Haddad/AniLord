@@ -28,7 +28,7 @@
     "web": {
       "favicon": "./app/assets/favicon.png"
     },
-    "description": "AniList mobile client for iOS and Android.",
+    "description": "Unofficial AniList mobile client for iOS and Android.",
     "githubUrl": "https://github.com/Massy-Haddad/AniLord"
   }
 }

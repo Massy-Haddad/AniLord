@@ -10,9 +10,10 @@ import {
   FlatList,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
+import { Picker } from "@react-native-community/picker";
 
 import { StatusBar } from "expo-status-bar";
-import { SimpleLineIcons } from "@expo/vector-icons";
+import { SimpleLineIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { data } from "../config/data";
 import { SharedElement } from "react-navigation-shared-element";
 
@@ -24,32 +25,34 @@ import { lightTheme, darkTheme } from "../../Theme";
 import searchBar from "../components/SearchBar";
 
 const { width } = Dimensions.get("screen");
-const ITEM_WIDTH = width * 0.8;
+const ITEM_WIDTH = width / 2;
+// const ITEM_WIDTH = width * 0.8;
 const ITEM_HEIGHT = ITEM_WIDTH * 0.8;
-const numColumns = 2;
 
 export default function SearchScreen({ navigation }) {
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
+
+  const [selectedValue, setSelectedValue] = useState("ANIME");
+  const [numColumns, setNumColumns] = useState(3);
 
   const [trending, setTrending] = useState([]);
   const [season, setSeason] = useState([]);
   const [nextSeason, setNextSeason] = useState([]);
   const [popular, setPopular] = useState([]);
   const [top, setTop] = useState([]);
-
-  useEffect(() => {
-    getAnimeData();
-  }, []);
-
-  var variables = {
+  const [variables, setVariables] = useState({
     nextSeason: "SPRING",
     nextYear: 2021,
     season: "WINTER",
     seasonYear: 2021,
     type: "MANGA",
     perPage: 3,
-  };
+  });
+
+  useEffect(() => {
+    getAnimeData();
+  }, []);
 
   var query = `
   query ($season: MediaSeason, $seasonYear: Int, $nextSeason: MediaSeason, $nextYear: Int) {
@@ -208,20 +211,56 @@ export default function SearchScreen({ navigation }) {
           backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
         />
 
+        {/* TEST THEME */}
+        <MaterialCommunityIcons
+          name={numColumns == 2 ? "view-list" : "crop-square"}
+          size={28}
+          color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+          style={{
+            position: "absolute",
+            top: 50,
+            right: 20,
+            zIndex: 2,
+            //backgroundColor: "lightgrey",
+            //borderRadius: 50,
+            //padding: 3,
+          }}
+          onPress={() => {
+            numColumns == 2 ? setNumColumns(3) : setNumColumns(2);
+          }}
+        />
+
         {/* Header */}
         <View
           style={{ marginTop: 42, marginBottom: 12, paddingHorizontal: 20 }}
         >
-          <Text
-            style={{
-              color: theme.PRIMARY_TEXT_COLOR,
-              fontSize: 32,
-              fontWeight: "600",
-              marginBottom: 18,
-            }}
-          >
-            Search
-          </Text>
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={{
+                color: theme.PRIMARY_TEXT_COLOR,
+                fontSize: 32,
+                fontWeight: "600",
+                marginBottom: 18,
+                marginRight: 5,
+              }}
+            >
+              Search
+            </Text>
+            <Picker
+              selectedValue={selectedValue}
+              style={{ height: 50, width: 150, justifyContent: "center" }}
+              onValueChange={(itemValue, itemIndex) =>
+                setSelectedValue(itemValue)
+              }
+              itemStyle={{ backgroundColor: "red", color: "red" }}
+              mode="dropdown"
+              pickerStyleType={{ backgroundColor: "red" }}
+            >
+              <Picker.Item label="MANWHA" value="MANWHA" />
+              <Picker.Item label="MANGA" value="MANGA" />
+              <Picker.Item label="ANIME" value="ANIME" />
+            </Picker>
+          </View>
           <SearchBar />
         </View>
 
