@@ -13,13 +13,32 @@ const store = createStore(
   applyMiddleware(thunk)
 );
 
+// GraphQL
+import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
+import { HttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { NETWORK_INTERFACE } from "./app/config";
+
+const apolloClient = new ApolloClient({
+  link: new HttpLink({ uri: NETWORK_INTERFACE }),
+  cache: new InMemoryCache(),
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
 // disabling the yellow warning box (temporarily)
 console.disableYellowBox = true;
 
 export default function App() {
   return (
     <Provider store={store}>
-      <RootNavigator />
+      <ApolloProvider client={apolloClient}>
+        <RootNavigator />
+      </ApolloProvider>
     </Provider>
   );
 }
