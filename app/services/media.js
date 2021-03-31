@@ -1,40 +1,190 @@
-export const variables = {
-  //nextSeason: "SPRING",
-  //nextYear: 2021,
-  //season: "WINTER",
-  //seasonYear: 2021,
-  type: "MANGA",
-};
+import gql from "graphql-tag";
 
-// Query
-export var query = `
-    query {
-        top: Page(page: 1, perPage: 50) {
-            media(sort: SCORE_DESC, type: ANIME, isAdult: false) {
-                ...media
-            }
+export const PROFILE_QUERY = gql`
+  query($userName: String, $type: MediaType) {
+    MediaListCollection(userName: $userName, type: $type) {
+      lists {
+        name
+        isCustomList
+        isCompletedList: isSplitCompletedList
+        entries {
+          ...mediaListEntry
         }
+      }
+      user {
+        id
+        name
+        avatar {
+          large
+        }
+        bannerImage
+        mediaListOptions {
+          scoreFormat
+          rowOrder
+          animeList {
+            sectionOrder
+            customLists
+            splitCompletedSectionByFormat
+            theme
+          }
+          mangaList {
+            sectionOrder
+            customLists
+            splitCompletedSectionByFormat
+            theme
+          }
+        }
+      }
     }
-    fragment media on Media {
+  }
+  fragment mediaListEntry on MediaList {
+    id
+    mediaId
+    status
+    score
+    progress
+    progressVolumes
+    repeat
+    priority
+    private
+    hiddenFromStatusLists
+    customLists
+    advancedScores
+    notes
+    updatedAt
+    startedAt {
+      year
+      month
+      day
+    }
+    completedAt {
+      year
+      month
+      day
+    }
+    media {
+      id
+      title {
+        userPreferred
+        romaji
+        english
+        native
+      }
+      coverImage {
+        extraLarge
+        large
+      }
+      type
+      format
+      status(version: 2)
+      episodes
+      volumes
+      chapters
+      averageScore
+      popularity
+      isAdult
+      countryOfOrigin
+      genres
+      bannerImage
+      startDate {
+        year
+        month
+        day
+      }
+    }
+  }
+`;
+
+export const SEARCH_QUERY = gql`
+  query(
+    $page: Int = 1
+    $id: Int
+    $type: MediaType
+    $isAdult: Boolean = false
+    $search: String = "Jujutsu Kaisen"
+    $format: [MediaFormat]
+    $status: MediaStatus
+    $countryOfOrigin: CountryCode
+    $source: MediaSource
+    $season: MediaSeason
+    $seasonYear: Int
+    $year: String
+    $onList: Boolean
+    $yearLesser: FuzzyDateInt
+    $yearGreater: FuzzyDateInt
+    $episodeLesser: Int
+    $episodeGreater: Int
+    $durationLesser: Int
+    $durationGreater: Int
+    $chapterLesser: Int
+    $chapterGreater: Int
+    $volumeLesser: Int
+    $volumeGreater: Int
+    $licensedBy: [String]
+    $genres: [String]
+    $excludedGenres: [String]
+    $tags: [String]
+    $excludedTags: [String]
+    $minimumTagRank: Int
+    $sort: [MediaSort] = [POPULARITY_DESC, SCORE_DESC]
+  ) {
+    Page(page: $page, perPage: 20) {
+      pageInfo {
+        total
+        perPage
+        currentPage
+        lastPage
+        hasNextPage
+      }
+      media(
+        id: $id
+        type: $type
+        season: $season
+        format_in: $format
+        status: $status
+        countryOfOrigin: $countryOfOrigin
+        source: $source
+        search: $search
+        onList: $onList
+        seasonYear: $seasonYear
+        startDate_like: $year
+        startDate_lesser: $yearLesser
+        startDate_greater: $yearGreater
+        episodes_lesser: $episodeLesser
+        episodes_greater: $episodeGreater
+        duration_lesser: $durationLesser
+        duration_greater: $durationGreater
+        chapters_lesser: $chapterLesser
+        chapters_greater: $chapterGreater
+        volumes_lesser: $volumeLesser
+        volumes_greater: $volumeGreater
+        licensedBy_in: $licensedBy
+        genre_in: $genres
+        genre_not_in: $excludedGenres
+        tag_in: $tags
+        tag_not_in: $excludedTags
+        minimumTagRank: $minimumTagRank
+        sort: $sort
+        isAdult: $isAdult
+      ) {
         id
         title {
-            userPreferred
-            english
+          userPreferred
         }
         coverImage {
-            extraLarge
-            large
-            color
+          extraLarge
+          large
+          color
         }
         startDate {
-            year
-            month
-            day
+          year
+          month
+          day
         }
         endDate {
-            year
-            month
-            day
+          year
+          month
+          day
         }
         bannerImage
         season
@@ -50,44 +200,25 @@ export var query = `
         isAdult
         averageScore
         popularity
-        mediaListEntry {
-            id
-            status
+        nextAiringEpisode {
+          airingAt
+          timeUntilAiring
+          episode
         }
+        mediaListEntry {
+          id
+          status
+        }
+        studios(isMain: true) {
+          edges {
+            isMain
+            node {
+              id
+              name
+            }
+          }
+        }
+      }
     }
+  }
 `;
-
-export const url = "https://graphql.anilist.co",
-  options = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      query: query,
-      variables: variables,
-    }),
-  };
-
-export const getData = async () => {
-  fetch(url, options).then(handleResponse).then(handleData).catch(handleError);
-};
-
-// Utils
-
-function handleResponse(response) {
-  return response.json().then(function (json) {
-    return response.ok ? json : Promise.reject(json);
-  });
-}
-
-function handleData(data) {
-  //console.log(data.data.top.media);
-  //setAnimeData(data.data.top.media);
-}
-
-function handleError(error) {
-  alert("Error, check console");
-  console.error(error);
-}

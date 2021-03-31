@@ -252,13 +252,15 @@ export default function SearchScreen({ navigation }) {
               onValueChange={(itemValue, itemIndex) =>
                 setSelectedValue(itemValue)
               }
-              itemStyle={{ backgroundColor: "red", color: "red" }}
+              itemStyle={{
+                color: theme.PRIMARY_BUTTON_TEXT_COLOR,
+                backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+              }}
               mode="dropdown"
-              pickerStyleType={{ backgroundColor: "red" }}
+              pickerStyleType={{}}
             >
-              <Picker.Item label="MANWHA" value="MANWHA" />
-              <Picker.Item label="MANGA" value="MANGA" />
               <Picker.Item label="ANIME" value="ANIME" />
+              <Picker.Item label="MANGA" value="MANGA" />
             </Picker>
           </View>
           <SearchBar />

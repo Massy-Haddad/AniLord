@@ -9,6 +9,7 @@ import {
   Dimensions,
   StyleSheet,
   ScrollView,
+  SafeAreaView,
 } from "react-native";
 
 // THEME
@@ -20,103 +21,9 @@ import { lightTheme, darkTheme } from "../../Theme";
 // GRAPHQL
 import { graphql, useQuery } from "react-apollo";
 import gql from "graphql-tag";
+import { PROFILE_QUERY } from "../services/media";
 
 // VARIABLES
-const PROFILE_QUERY = gql`
-  query($userName: String, $type: MediaType) {
-    MediaListCollection(userName: $userName, type: $type) {
-      lists {
-        name
-        isCustomList
-        isCompletedList: isSplitCompletedList
-        entries {
-          ...mediaListEntry
-        }
-      }
-      user {
-        id
-        name
-        avatar {
-          large
-        }
-        bannerImage
-        mediaListOptions {
-          scoreFormat
-          rowOrder
-          animeList {
-            sectionOrder
-            customLists
-            splitCompletedSectionByFormat
-            theme
-          }
-          mangaList {
-            sectionOrder
-            customLists
-            splitCompletedSectionByFormat
-            theme
-          }
-        }
-      }
-    }
-  }
-  fragment mediaListEntry on MediaList {
-    id
-    mediaId
-    status
-    score
-    progress
-    progressVolumes
-    repeat
-    priority
-    private
-    hiddenFromStatusLists
-    customLists
-    advancedScores
-    notes
-    updatedAt
-    startedAt {
-      year
-      month
-      day
-    }
-    completedAt {
-      year
-      month
-      day
-    }
-    media {
-      id
-      title {
-        userPreferred
-        romaji
-        english
-        native
-      }
-      coverImage {
-        extraLarge
-        large
-      }
-      type
-      format
-      status(version: 2)
-      episodes
-      volumes
-      chapters
-      averageScore
-      popularity
-      isAdult
-      countryOfOrigin
-      genres
-      bannerImage
-      startDate {
-        year
-        month
-        day
-      }
-    }
-  }
-`;
-
 const windowHeight = Dimensions.get("window").height;
 const ITEM_HEIGHT = windowHeight * 0.26;
 const width = Dimensions.get("window").width;
@@ -144,7 +51,7 @@ function ProfileScreen({ navigation }) {
   // MAIN
   return (
     <ThemeProvider theme={theme}>
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
@@ -210,8 +117,9 @@ function ProfileScreen({ navigation }) {
             </Text>
           </ScrollView>
         </View>
-      </View>
+      </SafeAreaView>
     </ThemeProvider>
   );
 }
-export default graphql(PROFILE_QUERY)(ProfileScreen);
+export default ProfileScreen;
+// export default graphql(PROFILE_QUERY)(ProfileScreen);
