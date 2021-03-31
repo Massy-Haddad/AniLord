@@ -1,5 +1,14 @@
 import React from "react";
-import { View, Text, FlatList, Image, ImageBackground } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  Image,
+  ImageBackground,
+  StatusBar,
+  Dimensions,
+  StyleSheet,
+} from "react-native";
 
 // THEME
 import styled, { ThemeProvider } from "styled-components";
@@ -12,7 +21,7 @@ import { graphql, useQuery } from "react-apollo";
 import gql from "graphql-tag";
 
 // VARIABLES
-const searchQuery = gql`
+const PROFILE_QUERY = gql`
   query($userName: String, $type: MediaType) {
     MediaListCollection(userName: $userName, type: $type) {
       lists {
@@ -107,16 +116,29 @@ const searchQuery = gql`
   }
 `;
 
+const windowHeight = Dimensions.get("window").height;
+const ITEM_HEIGHT = windowHeight * 0.26;
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+const TOP_HEADER_HEIGHT = height * 0.25;
+
 function ProfileScreen({ navigation }) {
   // THEME
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
 
   // GRAPHQL
-  const { loading, error, data } = useQuery(searchQuery, {
+  const { data, loading, error } = useQuery(PROFILE_QUERY, {
     variables: { userName: "Waghzen", type: "MANGA" },
   });
-  console.log(data.MediaListCollection.user);
+
+  if (loading || error) return null;
+
+  {
+    /* 
+  {console.log(data.MediaListCollection.lists[0].entries[0].id)}
+  {console.log(data.MediaListCollection.user.bannerImage)} */
+  }
 
   // MAIN
   return (
@@ -124,30 +146,48 @@ function ProfileScreen({ navigation }) {
       <View
         style={{
           flex: 1,
-          alignItems: "flex-end",
           backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-          paddingTop: 40,
+          paddingTop: StatusBar.currentHeight,
         }}
       >
-        <Text
-          style={{
-            fontSize: 32,
-            color: theme.PRIMARY_BUTTON_TEXT_COLOR,
-            marginBottom: 12,
-          }}
-        >
-          {data.MediaListCollection.user.name}
-        </Text>
-        <Image
-          style={{ width: 130, height: 130 }}
-          source={{ uri: data.MediaListCollection.user.avatar.large }}
-        />
         <ImageBackground
-          style={{ width: `100%`, height: `40`, aspectRatio: 1 }}
+          style={[
+            StyleSheet.absoluteFillObject,
+            {
+              height: TOP_HEADER_HEIGHT + 32,
+              resizeMode: "cover",
+              flexDirection: "row",
+            },
+          ]}
           source={{ uri: data.MediaListCollection.user.bannerImage }}
-        />
+        >
+          <Image
+            style={{
+              width: 110,
+              height: 110,
+              alignSelf: "flex-end",
+              marginHorizontal: 12,
+              borderTopLeftRadius: 5,
+              borderTopRightRadius: 5,
+            }}
+            source={{ uri: data.MediaListCollection.user.avatar.large }}
+          />
+          <Text
+            style={{
+              fontSize: 20,
+              color: "white" /* theme.PRIMARY_BUTTON_TEXT_COLOR */,
+              alignSelf: "flex-end",
+              marginVertical: 12,
+              textShadowColor: "black",
+              textShadowRadius: 12,
+              textShadowOffset: { width: -1, height: 1 },
+            }}
+          >
+            {data.MediaListCollection.user.name}
+          </Text>
+        </ImageBackground>
       </View>
     </ThemeProvider>
   );
 }
-export default graphql(searchQuery)(ProfileScreen);
+export default graphql(PROFILE_QUERY)(ProfileScreen);
