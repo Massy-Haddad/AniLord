@@ -10,7 +10,7 @@ import {
   FlatList,
 } from "react-native";
 import SearchBar from "../components/SearchBar";
-import { Picker } from "@react-native-community/picker";
+import { Picker } from "@react-native-picker/picker";
 
 import { StatusBar } from "expo-status-bar";
 import { SimpleLineIcons, MaterialCommunityIcons } from "@expo/vector-icons";

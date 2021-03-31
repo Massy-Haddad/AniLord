@@ -8,6 +8,7 @@ import {
   StatusBar,
   Dimensions,
   StyleSheet,
+  ScrollView,
 } from "react-native";
 
 // THEME
@@ -150,11 +151,12 @@ function ProfileScreen({ navigation }) {
           paddingTop: StatusBar.currentHeight,
         }}
       >
+        {/* HEADER */}
         <ImageBackground
           style={[
             StyleSheet.absoluteFillObject,
             {
-              height: TOP_HEADER_HEIGHT + 32,
+              height: TOP_HEADER_HEIGHT + 17,
               resizeMode: "cover",
               flexDirection: "row",
             },
@@ -175,6 +177,7 @@ function ProfileScreen({ navigation }) {
           <Text
             style={{
               fontSize: 20,
+              fontFamily: "Overpass-ExtraBold",
               color: "white" /* theme.PRIMARY_BUTTON_TEXT_COLOR */,
               alignSelf: "flex-end",
               marginVertical: 12,
@@ -186,6 +189,27 @@ function ProfileScreen({ navigation }) {
             {data.MediaListCollection.user.name}
           </Text>
         </ImageBackground>
+
+        {/* BODY */}
+        <View
+          style={{
+            transform: [
+              { translateY: TOP_HEADER_HEIGHT + StatusBar.currentHeight },
+            ],
+          }}
+        >
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              marginLeft: 12,
+              marginRight: 12,
+            }}
+          >
+            <Text style={{ fontSize: 32, alignSelf: "center" }}>
+              COMING SOON
+            </Text>
+          </ScrollView>
+        </View>
       </View>
     </ThemeProvider>
   );
