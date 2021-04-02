@@ -174,8 +174,8 @@ export default function HomeScreen({ navigation }) {
   const renderItem = ({ item, index }) => {
     return (
       <Animatable.View
-        animation="fadeIn"
-        duration={2000}
+        animation="zoomInUp"
+        duration={1000}
         delay={index * 100}
         //key={item.id.toString()}
       >
@@ -221,6 +221,7 @@ export default function HomeScreen({ navigation }) {
                       fontSize: 22,
                       fontWeight: "bold",
                       lineHeight: 28,
+                      fontFamily: 'Overpass_900Black'
                     }}
                   >
                     {item.title.userPreferred}
@@ -361,7 +362,7 @@ export default function HomeScreen({ navigation }) {
 const SafeAreaViewContainer = styled.SafeAreaView`
   flex: 1;
   background-color: ${(props) => props.theme.PRIMARY_BACKGROUND_COLOR};
-  padding-top: 42;
+  padding-top: 42px;
 `;
 
 // paddingTop was StatusBar.currentHeight

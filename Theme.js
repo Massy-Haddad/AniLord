@@ -7,7 +7,7 @@ export const darkTheme = {
   PRIMARY_BUTTON_COLOR: "#151f2e",
   PRIMARY_BUTTON_TEXT_COLOR: "#647380",
 
-  STATUS_BAR_STYLE: "light-content",
+  STATUS_BAR_STYLE: "default",
 };
 
 export const lightTheme = {

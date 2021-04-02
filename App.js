@@ -2,6 +2,10 @@ import "react-native-gesture-handler";
 import React from "react";
 import RootNavigator from "./app/navigation/RootNavigator";
 
+// FONT
+import AppLoading from 'expo-app-loading';
+import { useFonts, Overpass_900Black, Overpass_500Black } from '@expo-google-fonts/overpass';
+
 // Redux Store
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, combineReducers } from "redux";
@@ -34,6 +38,14 @@ const apolloClient = new ApolloClient({
 console.disableYellowBox = true;
 
 export default function App() {
+  // Font
+  let [fontsLoaded] = useFonts({
+    Overpass_900Black,
+  });
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else {
   return (
     <Provider store={store}>
       <ApolloProvider client={apolloClient}>
@@ -41,4 +53,5 @@ export default function App() {
       </ApolloProvider>
     </Provider>
   );
+}
 }

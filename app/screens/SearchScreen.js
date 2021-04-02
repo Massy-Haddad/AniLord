@@ -1,177 +1,49 @@
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
-  ScrollView,
   Text,
   View,
   TouchableOpacity,
   Image,
   Dimensions,
   FlatList,
+  TextInput,
 } from "react-native";
-import SearchBar from "../components/SearchBar";
+import * as Animatable from "react-native-animatable";
 import { Picker } from "@react-native-picker/picker";
-
 import { StatusBar } from "expo-status-bar";
-import { SimpleLineIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-import { data } from "../config/data";
-import { SharedElement } from "react-navigation-shared-element";
+import { MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 
+// THEME
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { switchTheme } from "../redux/themeActions";
 import { lightTheme, darkTheme } from "../../Theme";
 
-import searchBar from "../components/SearchBar";
+// GRAPHQL
+// import SearchBar from "../components/SearchBar";
+import { useQuery } from "react-apollo";
+import { SEARCH_QUERY } from "../services/media";
 
-const { width } = Dimensions.get("screen");
-const ITEM_WIDTH = width / 2;
-// const ITEM_WIDTH = width * 0.8;
-const ITEM_HEIGHT = ITEM_WIDTH * 0.8;
+const { width, height } = Dimensions.get("screen");
+const ITEM_WIDTH_2 = width / 2;
+const ITEM_WIDTH_3 = width * 0.8;
+const ITEM_HEIGHT = ITEM_WIDTH_2 * 0.8;
 
 export default function SearchScreen({ navigation }) {
+  // THEME
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
+
+  // GRAPHQL
+  const { data, loading, error } = useQuery(SEARCH_QUERY, {
+    variables: { search: "demon slayer" },
+  });
 
   const [selectedValue, setSelectedValue] = useState("ANIME");
   const [numColumns, setNumColumns] = useState(3);
 
-  const [trending, setTrending] = useState([]);
-  const [season, setSeason] = useState([]);
-  const [nextSeason, setNextSeason] = useState([]);
-  const [popular, setPopular] = useState([]);
-  const [top, setTop] = useState([]);
-  const [variables, setVariables] = useState({
-    nextSeason: "SPRING",
-    nextYear: 2021,
-    season: "WINTER",
-    seasonYear: 2021,
-    type: "MANGA",
-    perPage: 3,
-  });
-
-  useEffect(() => {
-    getAnimeData();
-  }, []);
-
-  var query = `
-  query ($season: MediaSeason, $seasonYear: Int, $nextSeason: MediaSeason, $nextYear: Int) {
-    trending: Page(page: 1, perPage: 50) {
-      media(sort: TRENDING_DESC, type: ANIME, isAdult: false) {
-        ...media
-      }
-    }
-    season: Page(page: 1, perPage: 6) {
-      media(season: $season, seasonYear: $seasonYear, sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
-        ...media
-      }
-    }
-    nextSeason: Page(page: 1, perPage: 6) {
-      media(season: $nextSeason, seasonYear: $nextYear, sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
-        ...media
-      }
-    }
-    popular: Page(page: 1, perPage: 6) {
-      media(sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
-        ...media
-      }
-    }
-    top: Page(page: 1, perPage: 10) {
-      media(sort: SCORE_DESC, type: ANIME, isAdult: false) {
-        ...media
-      }
-    }
-  }
-  fragment media on Media {
-    id
-    title {
-      userPreferred
-    }
-    coverImage {
-      extraLarge
-      large
-      color
-    }
-    startDate {
-      year
-      month
-      day
-    }
-    endDate {
-      year
-      month
-      day
-    }
-    bannerImage
-    season
-    description
-    type
-    format
-    status(version: 2)
-    episodes
-    duration
-    chapters
-    volumes
-    genres
-    isAdult
-    averageScore
-    popularity
-    mediaListEntry {
-      id
-      status
-    }
-    nextAiringEpisode {
-      airingAt
-      timeUntilAiring
-      episode
-    }
-    studios(isMain: true) {
-      edges {
-        isMain
-        node {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-  const url = "https://graphql.anilist.co",
-    options = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        query: query,
-        variables: variables,
-      }),
-    };
-
-  const getAnimeData = async () => {
-    fetch(url, options)
-      .then(handleResponse)
-      .then(handleData)
-      .catch(handleError);
-  };
-
-  function handleResponse(response) {
-    return response.json().then(function (json) {
-      return response.ok ? json : Promise.reject(json);
-    });
-  }
-
-  function handleData(data) {
-    console.log(data.data.trending.media);
-    setTrending(data.data.trending.media);
-  }
-
-  function handleError(error) {
-    alert("Error, check console");
-    console.error(error);
-  }
+  useEffect(() => {}, [data]);
 
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -194,7 +66,10 @@ export default function SearchScreen({ navigation }) {
     }
     return (
       <Image
-        style={styles.item}
+        style={[
+          styles.item,
+          { height: numColumns == 2 ? ITEM_HEIGHT * 1.5 : ITEM_HEIGHT * 0.9 },
+        ]}
         source={{ uri: item.coverImage.extraLarge }}
       ></Image>
     );
@@ -203,7 +78,11 @@ export default function SearchScreen({ navigation }) {
   return (
     <ThemeProvider theme={theme}>
       <View
-        style={{ flex: 1, backgroundColor: theme.PRIMARY_BACKGROUND_COLOR }}
+        style={{
+          flex: 1,
+          backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+          paddingBottom: 100,
+        }}
       >
         {/* StatusBar */}
         <StatusBar
@@ -246,6 +125,7 @@ export default function SearchScreen({ navigation }) {
             >
               Search
             </Text>
+
             <Picker
               selectedValue={selectedValue}
               style={{ height: 50, width: 150, justifyContent: "center" }}
@@ -257,23 +137,59 @@ export default function SearchScreen({ navigation }) {
                 backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
               }}
               mode="dropdown"
-              pickerStyleType={{}}
+              pickerStyleType={{ color: "red" }}
             >
               <Picker.Item label="ANIME" value="ANIME" />
               <Picker.Item label="MANGA" value="MANGA" />
             </Picker>
           </View>
-          <SearchBar />
+
+          {/* SEARCHBAR */}
+          {/* <SearchBar /> */}
+          <View style={styles.searchContainer}>
+            <SimpleLineIcons
+              size={15}
+              color="grey"
+              name="magnifier"
+              style={styles.searhInputIcon}
+            />
+            <TextInput
+              placeholder="Search"
+              style={styles.searhInput}
+            ></TextInput>
+          </View>
         </View>
 
-        {/* Flatlist content */}
-        <FlatList
-          data={formatData(trending, numColumns)}
-          style={styles.container}
-          renderItem={renderItem}
-          numColumns={numColumns}
-          key={numColumns}
-        />
+        {loading ? (
+          <Animatable.View
+            animation="slideInDown"
+            iterationCount="infinite"
+            direction="alternate"
+            style={{ alignSelf: "center", paddingTop: height * 0.2 }}
+          >
+            <MaterialCommunityIcons
+              name="panda"
+              size={80}
+              color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+              style={
+                {
+                  //backgroundColor: "lightgrey",
+                  //borderRadius: 50,
+                  //padding: 3,
+                }
+              }
+            />
+            <Text style={{ textAlign:"center", fontWeight:"bold", color: theme.PRIMARY_BUTTON_TEXT_COLOR }}>L O A D I N G</Text>
+          </Animatable.View>
+        ) : (
+          <FlatList
+            data={formatData(data.Page.media, numColumns)}
+            style={styles.container}
+            renderItem={renderItem}
+            numColumns={numColumns}
+            key={numColumns}
+          />
+        )}
       </View>
     </ThemeProvider>
   );
@@ -285,13 +201,34 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   item: {
-    backgroundColor: "#4D243D",
+    backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
     margin: 12,
-    height: ITEM_HEIGHT * 0.9,
-    width: ITEM_WIDTH,
+    // height: ITEM_HEIGHT * 0.9,
+    // width: ITEM_WIDTH,
     borderRadius: 8,
+  },
+  searchContainer: {
+    display: "flex",
+    flexDirection: "row",
+    width: "100%",
+    height: 40,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    justifyContent: "center",
+  },
+  searhInput: {
+    width: "100%",
+    height: "100%",
+    fontSize: 16,
+    //color: "#2e1408",
+    paddingLeft: 32,
+  },
+  searhInputIcon: {
+    position: "absolute",
+    left: 8,
+    top: 12,
   },
 });

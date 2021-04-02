@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@expo-google-fonts/overpass": "^0.1.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-native-picker/picker": "github:react-native-picker/picker",
     "@react-navigation/bottom-tabs": "^5.11.8",
@@ -17,6 +18,7 @@
     "apollo-client": "^2.6.10",
     "apollo-link-http": "^1.5.17",
     "expo": "~40.0.0",
+    "expo-app-loading": "^1.0.1",
     "expo-status-bar": "~1.0.3",
     "graphql": "^15.5.0",
     "graphql-tag": "^2.11.0",
