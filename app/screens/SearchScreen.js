@@ -128,7 +128,7 @@ export default function SearchScreen({ navigation }) {
 
             <Picker
               selectedValue={selectedValue}
-              style={{ height: 50, width: 150, justifyContent: "center" }}
+              style={{ height: 50, width: 160, justifyContent: "center", color: theme.PRIMARY_TEXT_COLOR }}
               onValueChange={(itemValue, itemIndex) =>
                 setSelectedValue(itemValue)
               }
@@ -136,26 +136,37 @@ export default function SearchScreen({ navigation }) {
                 color: theme.PRIMARY_BUTTON_TEXT_COLOR,
                 backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
               }}
-              mode="dropdown"
-              pickerStyleType={{ color: "red" }}
+              mode="dropdown" // enum('dialog', 'dropdown')	
+              prompt="What are you looking for today?"
+              pickerStyleType={{ backgroundColor: "red" }}
             >
               <Picker.Item label="ANIME" value="ANIME" />
               <Picker.Item label="MANGA" value="MANGA" />
+              <Picker.Item label="CHARACTER" value="CHARACTER" />
             </Picker>
           </View>
 
           {/* SEARCHBAR */}
           {/* <SearchBar /> */}
-          <View style={styles.searchContainer}>
+          <View
+            style={[
+              styles.searchContainer,
+              { backgroundColor: theme.PRIMARY_BUTTON_COLOR },
+            ]}
+          >
             <SimpleLineIcons
               size={15}
-              color="grey"
+              color={theme.PRIMARY_BUTTON_TEXT_COLOR}
               name="magnifier"
               style={styles.searhInputIcon}
             />
             <TextInput
-              placeholder="Search"
-              style={styles.searhInput}
+              style={[
+                styles.searhInput,
+                { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+              ]}
+              placeholder={"Enter " + selectedValue.toLowerCase() + " name"}
+              placeholderTextColor={theme.PRIMARY_BUTTON_TEXT_COLOR}
             ></TextInput>
           </View>
         </View>
@@ -179,7 +190,15 @@ export default function SearchScreen({ navigation }) {
                 }
               }
             />
-            <Text style={{ textAlign:"center", fontWeight:"bold", color: theme.PRIMARY_BUTTON_TEXT_COLOR }}>L O A D I N G</Text>
+            <Text
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                color: theme.PRIMARY_BUTTON_TEXT_COLOR,
+              }}
+            >
+              L O A D I N G
+            </Text>
           </Animatable.View>
         ) : (
           <FlatList
@@ -215,7 +234,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     height: 40,
-    backgroundColor: "#FFFFFF",
     borderRadius: 8,
     justifyContent: "center",
   },
