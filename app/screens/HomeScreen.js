@@ -330,6 +330,7 @@ export default function HomeScreen({ navigation }) {
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             data={trending}
             keyExtractor={(item) => item.id.toString()}
             key={(item) => item.id.toString()}
@@ -347,6 +348,7 @@ export default function HomeScreen({ navigation }) {
           </Text>
           <FlatList
             horizontal={true}
+            showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             data={nextSeason}
             keyExtractor={(item) => item.id.toString()}

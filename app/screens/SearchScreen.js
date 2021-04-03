@@ -22,7 +22,7 @@ import { lightTheme, darkTheme } from "../../Theme";
 
 // GRAPHQL
 // import SearchBar from "../components/SearchBar";
-import { useQuery } from "react-apollo";
+import { useQuery, useLazyQuery } from "react-apollo";
 import { SEARCH_QUERY } from "../services/media";
 
 const { width, height } = Dimensions.get("screen");
@@ -35,15 +35,20 @@ export default function SearchScreen({ navigation }) {
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
 
-  // GRAPHQL
-  const { data, loading, error } = useQuery(SEARCH_QUERY, {
-    variables: { search: "demon slayer" },
-  });
-
+  const [animeList, setAnimeList] = useState([]);
   const [selectedValue, setSelectedValue] = useState("ANIME");
   const [numColumns, setNumColumns] = useState(3);
+  const [searchInput, setSearchInput] = useState("demon slayer");
 
-  useEffect(() => {}, [data]);
+  // GRAPHQL
+  const [getSearch, { data, loading }] = useLazyQuery(SEARCH_QUERY);
+
+  useEffect(() => {
+    if (data && data.Page.media) {
+      setAnimeList(data.Page.media);
+    }
+  }, [animeList, data]);
+
 
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -128,7 +133,12 @@ export default function SearchScreen({ navigation }) {
 
             <Picker
               selectedValue={selectedValue}
-              style={{ height: 50, width: 160, justifyContent: "center", color: theme.PRIMARY_TEXT_COLOR }}
+              style={{
+                height: 50,
+                width: 160,
+                justifyContent: "center",
+                color: theme.PRIMARY_TEXT_COLOR,
+              }}
               onValueChange={(itemValue, itemIndex) =>
                 setSelectedValue(itemValue)
               }
@@ -136,18 +146,18 @@ export default function SearchScreen({ navigation }) {
                 color: theme.PRIMARY_BUTTON_TEXT_COLOR,
                 backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
               }}
-              mode="dropdown" // enum('dialog', 'dropdown')	
+              mode="dropdown" // enum('dialog', 'dropdown')
               prompt="What are you looking for today?"
               pickerStyleType={{ backgroundColor: "red" }}
             >
               <Picker.Item label="ANIME" value="ANIME" />
               <Picker.Item label="MANGA" value="MANGA" />
+              <Picker.Item label="ANIME/MANGA" value="" />
               <Picker.Item label="CHARACTER" value="CHARACTER" />
             </Picker>
           </View>
 
           {/* SEARCHBAR */}
-          {/* <SearchBar /> */}
           <View
             style={[
               styles.searchContainer,
@@ -158,15 +168,21 @@ export default function SearchScreen({ navigation }) {
               size={15}
               color={theme.PRIMARY_BUTTON_TEXT_COLOR}
               name="magnifier"
-              style={styles.searhInputIcon}
+              style={styles.searchInputIcon}
             />
             <TextInput
               style={[
-                styles.searhInput,
+                styles.searchInput,
                 { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
               ]}
-              placeholder={"Enter " + selectedValue.toLowerCase() + " name"}
+              placeholder={ "Enter " + selectedValue.toLowerCase() + " name" }
+              // placeholder={ searchInput === '' ? "Enter " + selectedValue.toLowerCase() + " name" : searchInput }
               placeholderTextColor={theme.PRIMARY_BUTTON_TEXT_COLOR}
+              onChangeText={(text) => setSearchInput(text)}
+              returnKeyType="search"
+              onSubmitEditing={() =>
+                selectedValue === "" ? getSearch({ variables: { search: searchInput } }) : getSearch({ variables: { search: searchInput, type: selectedValue } })
+              }
             ></TextInput>
           </View>
         </View>
@@ -202,12 +218,13 @@ export default function SearchScreen({ navigation }) {
           </Animatable.View>
         ) : (
           <FlatList
-            data={formatData(data.Page.media, numColumns)}
+            data={formatData(animeList, numColumns)}
             style={styles.container}
             renderItem={renderItem}
             numColumns={numColumns}
             key={numColumns}
           />
+          // <Text>COUCOU</Text>
         )}
       </View>
     </ThemeProvider>
@@ -229,6 +246,9 @@ const styles = StyleSheet.create({
     // width: ITEM_WIDTH,
     borderRadius: 8,
   },
+  itemInvisible: {
+    backgroundColor: 'transparent',
+  },
   searchContainer: {
     display: "flex",
     flexDirection: "row",
@@ -237,14 +257,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
   },
-  searhInput: {
+  searchInput: {
     width: "100%",
     height: "100%",
     fontSize: 16,
     //color: "#2e1408",
     paddingLeft: 32,
   },
-  searhInputIcon: {
+  searchInputIcon: {
     position: "absolute",
     left: 8,
     top: 12,

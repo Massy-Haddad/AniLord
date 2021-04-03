@@ -93,9 +93,9 @@ export default function RootNavigator() {
               elevation: 0,
               backgroundColor: theme.PRIMARY_BUTTON_COLOR,
               borderTopColor: "transparent",
-              height: 80,
-              borderTopLeftRadius: 40,
-              borderTopRightRadius: 40,
+              height: 90,
+              borderTopLeftRadius: 50,
+              borderTopRightRadius: 50,
             },
           }}
         >
