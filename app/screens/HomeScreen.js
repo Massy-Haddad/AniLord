@@ -45,7 +45,7 @@ export default function HomeScreen({ navigation }) {
     season: "WINTER",
     seasonYear: 2021,
     type: "MANGA",
-    perPage: 10,
+    perPage: 30,
   };
 
   var query = `
@@ -55,22 +55,22 @@ export default function HomeScreen({ navigation }) {
         ...media
       }
     }
-    season: Page(page: 1, perPage: 6) {
+    season: Page(page: 1, perPage: $perPage) {
       media(season: $season, seasonYear: $seasonYear, sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
         ...media
       }
     }
-    nextSeason: Page(page: 1, perPage: 6) {
+    nextSeason: Page(page: 1, perPage: $perPage) {
       media(season: $nextSeason, seasonYear: $nextYear, sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
         ...media
       }
     }
-    popular: Page(page: 1, perPage: 6) {
+    popular: Page(page: 1, perPage: $perPage) {
       media(sort: POPULARITY_DESC, type: ANIME, isAdult: false) {
         ...media
       }
     }
-    top: Page(page: 1, perPage: 10) {
+    top: Page(page: 1, perPage: $perPage) {
       media(sort: SCORE_DESC, type: ANIME, isAdult: false) {
         ...media
       }
@@ -175,15 +175,14 @@ export default function HomeScreen({ navigation }) {
     return (
       <Animatable.View
         animation="zoomInUp"
-        duration={1000}
+        duration={900}
         delay={index * 100}
-        //key={item.id.toString()}
       >
         <TouchableOpacity
           activeOpacity={0.8}
           style={{ marginBottom: 14 }}
           onPress={() =>
-            navigation.navigate("DetailScreen", { item, theme, dispatch })
+            navigation.navigate("DetailScreen", { item })
           }
         >
           <SharedElement id={`item.${item.id}.image_url`}>
@@ -221,7 +220,7 @@ export default function HomeScreen({ navigation }) {
                       fontSize: 22,
                       fontWeight: "bold",
                       lineHeight: 28,
-                      fontFamily: 'Overpass_900Black'
+                      fontFamily: 'Overpass_900Black',
                     }}
                   >
                     {item.title.userPreferred}
@@ -249,7 +248,7 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <SafeAreaViewContainer>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.PRIMARY_BACKGROUND_COLOR, paddingTop: StatusBar.currentHeight + 16 }}>
         {/* Status bar */}
         <StatusBar
           barStyle={theme.STATUS_BAR_STYLE}
@@ -356,15 +355,15 @@ export default function HomeScreen({ navigation }) {
             renderItem={renderItem}
           />
         </View>
-      </SafeAreaViewContainer>
+      </SafeAreaView>
     </ThemeProvider>
   );
 }
 
-const SafeAreaViewContainer = styled.SafeAreaView`
-  flex: 1;
-  background-color: ${(props) => props.theme.PRIMARY_BACKGROUND_COLOR};
-  padding-top: 42px;
-`;
+// const SafeAreaViewContainer = styled.SafeAreaView`
+//   flex: 1;
+//   background-color: ${(props) => props.theme.PRIMARY_BACKGROUND_COLOR};
+//   padding-top: 42px;
+// `;
 
 // paddingTop was StatusBar.currentHeight

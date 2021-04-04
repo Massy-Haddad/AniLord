@@ -8,6 +8,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
+import {
+  Screen,
+  screensEnabled,
+  // @ts-ignore
+  shouldUseActivityState,  // eslint-disable-line
+} from 'react-native-screens';
 
 // COMPONENTS
 import HomeScreen from "../screens/HomeScreen";
@@ -94,8 +100,8 @@ export default function RootNavigator() {
               backgroundColor: theme.PRIMARY_BUTTON_COLOR,
               borderTopColor: "transparent",
               height: 90,
-              borderTopLeftRadius: 50,
-              borderTopRightRadius: 50,
+              borderTopLeftRadius: 40,
+              borderTopRightRadius: 40,
             },
           }}
         >

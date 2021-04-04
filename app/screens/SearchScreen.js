@@ -76,7 +76,7 @@ export default function SearchScreen({ navigation }) {
           { height: numColumns == 2 ? ITEM_HEIGHT * 1.5 : ITEM_HEIGHT * 0.9 },
         ]}
         source={{ uri: item.coverImage.extraLarge }}
-      ></Image>
+      />
     );
   };
 

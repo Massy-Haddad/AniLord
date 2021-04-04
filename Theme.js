@@ -6,8 +6,9 @@ export const darkTheme = {
   SECONDARY_TEXT_COLOR: "#8ba0b2",
   PRIMARY_BUTTON_COLOR: "#151f2e",
   PRIMARY_BUTTON_TEXT_COLOR: "#647380",
+  SELECTED_ITEM_COLOR: "#3db4f2",
 
-  STATUS_BAR_STYLE: "default",
+  STATUS_BAR_STYLE: "light-content",
 };
 
 export const lightTheme = {
@@ -18,6 +19,7 @@ export const lightTheme = {
   SECONDARY_TEXT_COLOR: "#404e5c",
   PRIMARY_BUTTON_COLOR: "#fbfbfb",
   PRIMARY_BUTTON_TEXT_COLOR: "#748899",
+  SELECTED_ITEM_COLOR: "#3db4f2",
 
   STATUS_BAR_STYLE: "dark-content",
 };
