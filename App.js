@@ -3,8 +3,12 @@ import React from "react";
 import RootNavigator from "./app/navigation/RootNavigator";
 
 // FONT
-import AppLoading from 'expo-app-loading';
-import { useFonts, Overpass_900Black, Overpass_500Black } from '@expo-google-fonts/overpass';
+import AppLoading from "expo-app-loading";
+import {
+  useFonts,
+  Overpass_900Black,
+  Overpass_500Black,
+} from "@expo-google-fonts/overpass";
 
 // Redux Store
 import { Provider } from "react-redux";
@@ -39,19 +43,19 @@ console.disableYellowBox = true;
 
 export default function App() {
   // Font
-  let [fontsLoaded] = useFonts({
+  const [fontsLoaded] = useFonts({
     Overpass_900Black,
   });
 
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
-  return (
-    <Provider store={store}>
-      <ApolloProvider client={apolloClient}>
-        <RootNavigator />
-      </ApolloProvider>
-    </Provider>
-  );
-}
+    return (
+      <Provider store={store}>
+        <ApolloProvider client={apolloClient}>
+          <RootNavigator />
+        </ApolloProvider>
+      </Provider>
+    );
+  }
 }

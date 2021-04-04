@@ -119,6 +119,25 @@ export default function HomeScreen({ navigation }) {
       timeUntilAiring
       episode
     }
+    relations {
+      edges {
+        id
+        relationType(version: 2)
+        node {
+          id
+          title {
+            userPreferred
+          }
+          format
+          type
+          status(version: 2)
+          bannerImage
+          coverImage {
+            large
+          }
+        }
+      }
+    }
     studios(isMain: true) {
       edges {
         isMain
@@ -173,17 +192,11 @@ export default function HomeScreen({ navigation }) {
 
   const renderItem = ({ item, index }) => {
     return (
-      <Animatable.View
-        animation="zoomInUp"
-        duration={900}
-        delay={index * 100}
-      >
+      <Animatable.View animation="zoomInUp" duration={900} delay={index * 100}>
         <TouchableOpacity
           activeOpacity={0.8}
           style={{ marginBottom: 14 }}
-          onPress={() =>
-            navigation.navigate("DetailScreen", { item })
-          }
+          onPress={() => navigation.navigate("DetailScreen", { item })}
         >
           <SharedElement id={`item.${item.id}.image_url`}>
             <Image
@@ -220,7 +233,7 @@ export default function HomeScreen({ navigation }) {
                       fontSize: 20,
                       fontWeight: "bold",
                       lineHeight: 28,
-                      fontFamily: 'Overpass_900Black',
+                      fontFamily: "Overpass_900Black",
                     }}
                   >
                     {item.title.userPreferred}
@@ -248,7 +261,13 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: theme.PRIMARY_BACKGROUND_COLOR, paddingTop: StatusBar.currentHeight + 16 }}>
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
+          paddingTop: StatusBar.currentHeight + 16,
+        }}
+      >
         {/* Status bar */}
         <StatusBar
           barStyle={theme.STATUS_BAR_STYLE}
@@ -324,13 +343,13 @@ export default function HomeScreen({ navigation }) {
               fontSize: 16,
             }}
           >
-            Trending now
+            This season
           </Text>
           <FlatList
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
-            data={trending}
+            data={season}
             keyExtractor={(item) => item.id.toString()}
             key={(item) => item.id.toString()}
             renderItem={renderItem}
