@@ -57,16 +57,23 @@ const Stack3 = createSharedElementStackNavigator({
   debug: true,
 });
 
-const Home = () => (
-  <Stack1.Navigator headerMode="none">
-    <Stack1.Screen name={name} component={HomeScreen} />
-    <Stack1.Screen
-      name="DetailScreen"
-      component={DetailScreen}
-      options={() => options}
-    />
-  </Stack1.Navigator>
-);
+function Home ({ navigation, route }) {
+  if (route.state && route.state.index > 0){
+    navigation.setOptions({tabBarVisible: false})
+  } else {
+    navigation.setOptions({tabBarVisible: true})
+  }
+  return(
+    <Stack1.Navigator headerMode="none">
+      <Stack1.Screen name={name} component={HomeScreen} />
+      <Stack1.Screen
+        name="DetailScreen"
+        component={DetailScreen}
+        options={() => options}
+      />
+    </Stack1.Navigator>
+  )
+}
 
 const Search = () => (
   <Stack2.Navigator headerMode="none">

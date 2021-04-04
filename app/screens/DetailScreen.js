@@ -32,6 +32,8 @@ const sections = [
   "Social",
 ];
 
+const details = ["format", "type", "duration"];
+
 const DetailScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const theme = useSelector((state) => state.themeReducer.theme);
@@ -45,6 +47,8 @@ const DetailScreen = ({ navigation, route }) => {
         ]}
       >
         {console.log(item)}
+        {console.log(Object.keys(item))}
+        {/* {console.log(Object.values(item))} */}
 
         {/* CLOSE */}
         <MaterialCommunityIcons
@@ -116,41 +120,205 @@ const DetailScreen = ({ navigation, route }) => {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          <View style={styles.genres}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {item.genres.map((genre) => (
-                <View
-                  style={[
-                    styles.genre,
-                    { backgroundColor: item.coverImage.color },
-                  ]}
-                >
-                  <Text style={styles.genreText}>{genre}</Text>
-                </View>
-              ))}
-            </ScrollView>
-          </View>
-        </View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={styles.genres}>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                {item.genres.map((genre) => (
+                  <View
+                    style={[
+                      styles.genre,
+                      { backgroundColor: item.coverImage.color },
+                    ]}
+                  >
+                    <Text style={styles.genreText}>{genre}</Text>
+                  </View>
+                ))}
+              </ScrollView>
+            </View>
 
-        <View style={styles.details}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {sections.map((section) => (
-              <TouchableOpacity style={styles.detail}>
-                <Text
-                  style={[
-                    styles.detailText,
-                    {
-                      color:
-                        section === "Overview"
-                          ? theme.SELECTED_ITEM_COLOR
-                          : theme.SECONDARY_TEXT_COLOR,
-                    },
-                  ]}
-                >
-                  {section}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            <View
+              style={[
+                styles.details,
+                { backgroundColor: theme.PRIMARY_BUTTON_COLOR },
+              ]}
+            >
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Format
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.format}
+                  </Text>
+                </View>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Episodes
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.episodes}
+                  </Text>
+                </View>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Episode duration
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.duration + "mins"}
+                  </Text>
+                </View>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Status
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.status?.toLowerCase()}
+                  </Text>
+                </View>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Start date
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.startDate?.day +
+                      "/" +
+                      item?.startDate?.month +
+                      "/" +
+                      item?.startDate?.year}
+                  </Text>
+                </View>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    End date
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.endDate?.day +
+                      "/" +
+                      item?.endDate?.month +
+                      "/" +
+                      item?.endDate?.year}
+                  </Text>
+                </View>
+
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Season
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.season?.toLowerCase()}
+                  </Text>
+                </View>
+                <View style={styles.detail}>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                    ]}
+                  >
+                    Studio
+                  </Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      { color: theme.PRIMARY_TEXT_COLOR },
+                    ]}
+                  >
+                    {item?.studios?.edges[0]?.node?.name}
+                  </Text>
+                </View>
+              </ScrollView>
+            </View>
+            <View style={styles.description}>
+              <Text
+                style={[
+                  styles.descriptionTitle,
+                  { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Description
+              </Text>
+              <Text
+                style={[
+                  styles.descriptionText,
+                  {
+                    backgroundColor: theme.PRIMARY_BUTTON_COLOR,
+                    color: theme.PRIMARY_BUTTON_TEXT_COLOR,
+                  },
+                ]}
+              >
+                {item.description}
+              </Text>
+            </View>
           </ScrollView>
         </View>
       </SafeAreaView>
@@ -217,6 +385,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   section: {
+    marginTop: SPACING,
     padding: SPACING + 2,
     justifyContent: "center",
   },
@@ -227,6 +396,7 @@ const styles = StyleSheet.create({
 
   // CONTENT
   content: {
+    flex: 1,
     paddingTop: SPACING * 3,
     paddingLeft: 20,
     paddingRight: 20,
@@ -234,7 +404,7 @@ const styles = StyleSheet.create({
 
   // GENRES
   genres: {
-    padding: SPACING,
+    marginBottom: SPACING * 2,
     alignItems: "center",
   },
   genre: {
@@ -252,17 +422,32 @@ const styles = StyleSheet.create({
 
   // DETAILS
   details: {
-    alignContent:"center",
-    margin: 25,
-    paddingBottom: 18,
+    padding: SPACING * 2 + 2,
+    marginBottom: SPACING * 3 + 1,
+    borderRadius: 3,
   },
   detail: {
-    padding: SPACING + 2,
-    justifyContent: "center",
+    paddingRight: SPACING * 2 + 2, // was "SPACING * 3"
+    alignItems: "flex-start",
   },
   detailText: {
     textAlign: "center",
     fontSize: 16,
+  },
+
+  // DESCRIPTION
+  description: {
+    marginBottom: SPACING * 4 - 2,
+  },
+  descriptionTitle: {
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  descriptionText: {
+    padding: SPACING * 2 + 4,
+    borderRadius: 4,
+    fontSize: 14,
   },
 
   // OTHERS

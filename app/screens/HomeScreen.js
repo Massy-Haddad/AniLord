@@ -217,7 +217,7 @@ export default function HomeScreen({ navigation }) {
                   <Text
                     style={{
                       color: "white",
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: "bold",
                       lineHeight: 28,
                       fontFamily: 'Overpass_900Black',
