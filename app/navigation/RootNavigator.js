@@ -12,8 +12,8 @@ import {
   Screen,
   screensEnabled,
   // @ts-ignore
-  shouldUseActivityState,  // eslint-disable-line
-} from 'react-native-screens';
+  shouldUseActivityState, // eslint-disable-line
+} from "react-native-screens";
 
 // COMPONENTS
 import HomeScreen from "../screens/HomeScreen";
@@ -39,9 +39,7 @@ const options = {
 };
 
 const name = "BottomTabs";
-
 const BottomTab = createBottomTabNavigator();
-
 const Stack1 = createSharedElementStackNavigator({
   name,
   debug: true,
@@ -57,13 +55,13 @@ const Stack3 = createSharedElementStackNavigator({
   debug: true,
 });
 
-function Home ({ navigation, route }) {
-  if (route.state && route.state.index > 0){
-    navigation.setOptions({tabBarVisible: false})
+function Home({ navigation, route }) {
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
   } else {
-    navigation.setOptions({tabBarVisible: true})
+    navigation.setOptions({ tabBarVisible: true });
   }
-  return(
+  return (
     <Stack1.Navigator headerMode="none">
       <Stack1.Screen name={name} component={HomeScreen} />
       <Stack1.Screen
@@ -72,7 +70,7 @@ function Home ({ navigation, route }) {
         options={() => options}
       />
     </Stack1.Navigator>
-  )
+  );
 }
 
 const Search = () => (
@@ -120,7 +118,11 @@ export default function RootNavigator() {
                 <View
                   style={{ alignItems: "center", justifyContent: "center" }}
                 >
-                  <FontAwesome5 name="home" size={24} color={theme.PRIMARY_BUTTON_TEXT_COLOR} />
+                  <FontAwesome5
+                    name="home"
+                    size={24}
+                    color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+                  />
                 </View>
               ),
             }}
@@ -132,7 +134,11 @@ export default function RootNavigator() {
             options={{
               title: "SEARCH",
               tabBarIcon: () => (
-                <FontAwesome5 name="search" size={20} color={theme.PRIMARY_BUTTON_TEXT_COLOR} />
+                <FontAwesome5
+                  name="search"
+                  size={20}
+                  color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+                />
               ),
             }}
           />
@@ -143,7 +149,11 @@ export default function RootNavigator() {
             options={{
               title: "PROFILE",
               tabBarIcon: () => (
-                <FontAwesome5 name="user-alt" size={24} color={theme.PRIMARY_BUTTON_TEXT_COLOR} />
+                <FontAwesome5
+                  name="user-alt"
+                  size={24}
+                  color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+                />
               ),
             }}
           />
