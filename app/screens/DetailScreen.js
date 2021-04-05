@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -23,6 +23,10 @@ import { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import Overview from "../components/Overview";
 
+// NAVIGATION
+import { NavigationContainer } from "@react-navigation/native";
+import DetailScreenTab from "../navigation/DetailScreenTab";
+
 const SPACING = 8;
 const sections = [
   "Overview",
@@ -36,6 +40,8 @@ const sections = [
 const DetailScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const theme = useSelector((state) => state.themeReducer.theme);
+
+  const [trending, setTrending] = useState([]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -113,6 +119,10 @@ const DetailScreen = ({ navigation, route }) => {
         </View>
 
         {/* OVERVIEW */}
+        {/* <NavigationContainer independent={true}>
+          <DetailScreenTab screenProps={{ theme: theme }} />
+        </NavigationContainer> */}
+
         <View
           style={[
             styles.content,
