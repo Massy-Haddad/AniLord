@@ -7,7 +7,6 @@ import {
   FlatList,
   Image,
 } from "react-native";
-import { SimpleLineIcons } from "@expo/vector-icons";
 
 const SPACING = 8;
 
@@ -353,9 +352,12 @@ const styles = StyleSheet.create({
     padding: SPACING + 4,
     justifyContent: "space-between",
   },
-  relationType: {},
-  relationTitle: { fontSize: 14, fontWeight: "bold" },
-  relationOthers: {},
+  relationType: { textTransform: "capitalize" },
+  relationTitle: {
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  relationOthers: { textTransform: "capitalize" },
 });
 
 export default Overview;
