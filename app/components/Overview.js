@@ -1,12 +1,64 @@
 import React from "react";
-import { StyleSheet, View, Text, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  FlatList,
+  Image,
+} from "react-native";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
 const SPACING = 8;
 
 function Overview(props) {
+  const renderItem = ({ item }) => {
+    return (
+      <View
+        style={[
+          styles.relation,
+          { backgroundColor: props.theme.PRIMARY_BUTTON_COLOR },
+        ]}
+      >
+        <Image
+          style={styles.relationCoverImage}
+          source={{ uri: item.node.coverImage.large }}
+        />
+        <View style={styles.relationDetails}>
+          <Text
+            style={[
+              styles.relationType,
+              { color: props.theme.SELECTED_ITEM_COLOR },
+            ]}
+          >
+            {item.relationType.toLowerCase()}
+          </Text>
+          <Text
+            style={[
+              styles.relationTitle,
+              { color: props.theme.PRIMARY_TEXT_COLOR },
+            ]}
+          >
+            {item.node.title.userPreferred}
+          </Text>
+          <Text
+            style={[
+              styles.relationOthers,
+              { color: props.theme.PRIMARY_TEXT_COLOR },
+            ]}
+          >
+            {item.node.format.toLowerCase() +
+              " · " +
+              item.node.status.toLowerCase()}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      {/* GENRES */}
       <View style={styles.genres}>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {props.item.genres.map((genre) => (
@@ -22,6 +74,7 @@ function Overview(props) {
         </ScrollView>
       </View>
 
+      {/* DETAILS */}
       <View
         style={[
           styles.details,
@@ -183,10 +236,12 @@ function Overview(props) {
           </View>
         </ScrollView>
       </View>
+
+      {/* DESCRIPTION */}
       <View style={styles.description}>
         <Text
           style={[
-            styles.descriptionTitle,
+            styles.contentTitle,
             { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
           ]}
         >
@@ -204,11 +259,37 @@ function Overview(props) {
           {props.item.description}
         </Text>
       </View>
+
+      {/* RELATIONs */}
+      <Text
+        style={[
+          styles.contentTitle,
+          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+        ]}
+      >
+        Relations
+      </Text>
+      <View style={styles.relations}>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={props.item.relations.edges}
+          renderItem={renderItem}
+          numColumns={1}
+        />
+      </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  // CONTENT
+  contentTitle: {
+    marginBottom: 10,
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
   // GENRES
   genres: {
     marginBottom: SPACING * 2,
@@ -246,16 +327,35 @@ const styles = StyleSheet.create({
   description: {
     marginBottom: SPACING * 4 - 2,
   },
-  descriptionTitle: {
-    marginBottom: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   descriptionText: {
     padding: SPACING * 2 + 4,
     borderRadius: 4,
     fontSize: 14,
   },
+
+  // RELATIONS
+  relations: { marginBottom: SPACING * 4 - 2 },
+  relation: {
+    flexDirection: "row",
+    marginRight: SPACING * 3 + 1,
+    minWidth: 250,
+    maxWidth: 400,
+    borderRadius: 3,
+  },
+  relationCoverImage: {
+    width: 80,
+    height: undefined,
+    aspectRatio: 85 / 115,
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
+  },
+  relationDetails: {
+    padding: SPACING + 4,
+    justifyContent: "space-between",
+  },
+  relationType: {},
+  relationTitle: { fontSize: 14, fontWeight: "bold" },
+  relationOthers: {},
 });
 
 export default Overview;

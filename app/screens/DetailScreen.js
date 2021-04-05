@@ -205,7 +205,8 @@ const styles = StyleSheet.create({
   // OTHERS
   close: {
     position: "absolute",
-    top: StatusBar.currentHeight,
+    top:
+      Platform.OS === "ios" ? SPACING * 4 : StatusBar.currentHeight + SPACING,
     right: SPACING * 2,
     zIndex: 2,
     textShadowColor: "black",
