@@ -92,6 +92,12 @@ export default function RootNavigator() {
 
   return (
     <ThemeProvider theme={theme}>
+      {/* STATUS BAR */}
+      <StatusBar
+        barStyle={theme.STATUS_BAR_STYLE}
+        backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
+      />
+
       <NavigationContainer>
         <BottomTab.Navigator
           tabBarOptions={{

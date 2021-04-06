@@ -293,13 +293,7 @@ export default function HomeScreen({ navigation }) {
           paddingTop: StatusBar.currentHeight + 16,
         }}
       >
-        {/* Status bar */}
-        <StatusBar
-          barStyle={theme.STATUS_BAR_STYLE}
-          backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
-        />
-
-        {/* TEST THEME */}
+        {/* THEME SWITCH */}
         {theme.mode === "light" ? (
           <MaterialCommunityIcons
             name="ghost"
