@@ -49,7 +49,6 @@ export default function SearchScreen({ navigation }) {
     }
   }, [animeList, data]);
 
-
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
 
@@ -89,13 +88,7 @@ export default function SearchScreen({ navigation }) {
           paddingBottom: 100,
         }}
       >
-        {/* StatusBar */}
-        <StatusBar
-          barStyle={theme.STATUS_BAR_STYLE}
-          backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
-        />
-
-        {/* TEST THEME */}
+        {/* LIST SIZE */}
         <MaterialCommunityIcons
           name={numColumns == 2 ? "view-list" : "crop-square"}
           size={28}
@@ -175,13 +168,17 @@ export default function SearchScreen({ navigation }) {
                 styles.searchInput,
                 { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
               ]}
-              placeholder={ "Enter " + selectedValue.toLowerCase() + " name" }
+              placeholder={"Enter " + selectedValue.toLowerCase() + " name"}
               // placeholder={ searchInput === '' ? "Enter " + selectedValue.toLowerCase() + " name" : searchInput }
               placeholderTextColor={theme.PRIMARY_BUTTON_TEXT_COLOR}
               onChangeText={(text) => setSearchInput(text)}
               returnKeyType="search"
               onSubmitEditing={() =>
-                selectedValue === "" ? getSearch({ variables: { search: searchInput } }) : getSearch({ variables: { search: searchInput, type: selectedValue } })
+                selectedValue === ""
+                  ? getSearch({ variables: { search: searchInput } })
+                  : getSearch({
+                      variables: { search: searchInput, type: selectedValue },
+                    })
               }
             ></TextInput>
           </View>
@@ -247,7 +244,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   itemInvisible: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   searchContainer: {
     display: "flex",
