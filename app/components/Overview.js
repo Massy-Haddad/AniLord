@@ -30,7 +30,7 @@ function Overview(props) {
               { color: props.theme.SELECTED_ITEM_COLOR },
             ]}
           >
-            {item.relationType.toLowerCase()}
+            {item.relationType}
           </Text>
           <Text
             style={[
@@ -46,11 +46,67 @@ function Overview(props) {
               { color: props.theme.PRIMARY_TEXT_COLOR },
             ]}
           >
-            {item.node.format.toLowerCase() +
-              " · " +
-              item.node.status.toLowerCase()}
+            {item.node.format + " · " + item.node.status}
           </Text>
         </View>
+      </View>
+    );
+  };
+
+  const renderItemCharacters = ({ item }) => {
+    return (
+      <View
+        style={[
+          styles.character,
+          { backgroundColor: props.theme.PRIMARY_BUTTON_COLOR },
+        ]}
+      >
+        <Image
+          style={styles.characterCoverImage}
+          source={{ uri: item.node.image.large }}
+        />
+        <View style={styles.characterDetailsWrapper}>
+          <View style={styles.characterDetails}>
+            <Text
+              style={[
+                styles.characterDetailsName,
+                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+              ]}
+            >
+              {item.node.name.full}
+            </Text>
+            <Text
+              style={[
+                styles.characterDetailsOthers,
+                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+              ]}
+            >
+              {item.role}
+            </Text>
+          </View>
+          <View style={styles.characterDetails}>
+            <Text
+              style={[
+                styles.characterDetailsName,
+                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+              ]}
+            >
+              {item.node.name.full}
+            </Text>
+            <Text
+              style={[
+                styles.characterDetailsOthers,
+                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+              ]}
+            >
+              {item.role}
+            </Text>
+          </View>
+        </View>
+        <Image
+          style={styles.characterSeiyuuImage}
+          source={{ uri: item.voiceActors[0].image.large }}
+        />
       </View>
     );
   };
@@ -277,6 +333,24 @@ function Overview(props) {
           numColumns={1}
         />
       </View>
+
+      {/* CHARACTERS */}
+      <Text
+        style={[
+          styles.contentTitle,
+          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+        ]}
+      >
+        Characters
+      </Text>
+      <View style={styles.characters}>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={props.item.characterPreview.edges}
+          renderItem={renderItemCharacters}
+          numColumns={1}
+        />
+      </View>
     </ScrollView>
   );
 }
@@ -358,6 +432,41 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   relationOthers: { textTransform: "capitalize" },
+
+  // CHARACTERS
+  characters: { marginBottom: SPACING * 4 - 2 },
+  character: {
+    flexDirection: "row",
+    height: 85,
+    borderRadius: 3,
+    marginBottom: SPACING * 3 - 2,
+    justifyContent: "space-between",
+  },
+  characterCoverImage: {
+    width: undefined,
+    height: undefined,
+    aspectRatio: 60 / 82,
+    borderTopLeftRadius: 3,
+    borderBottomLeftRadius: 3,
+  },
+  characterSeiyuuImage: {
+    width: undefined,
+    height: undefined,
+    aspectRatio: 60 / 82,
+    borderTopRightRadius: 3,
+    borderBottomRightRadius: 3,
+  },
+  characterDetailsWrapper: {
+    flexDirection: "row",
+    alignContent: "space-between",
+  },
+  characterDetails: {
+    padding: SPACING,
+    maxWidth: 105,
+    justifyContent: "space-between",
+  },
+  characterDetailsName: { fontSize: 13, fontWeight: "bold" },
+  characterDetailsOthers: { fontSize: 10, textTransform: "capitalize" },
 });
 
 export default Overview;

@@ -138,6 +138,31 @@ export default function HomeScreen({ navigation }) {
         }
       }
     }
+    characterPreview: characters(perPage: 4, sort: [ROLE, ID]) {
+      edges {
+        id
+        role
+        voiceActors(language: JAPANESE) {
+          id
+          name {
+            full
+          }
+          language
+          image {
+            large
+          }
+        }
+        node {
+          id
+          name {
+            full
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
     studios(isMain: true) {
       edges {
         isMain
