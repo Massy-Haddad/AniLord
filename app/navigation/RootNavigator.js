@@ -1,7 +1,7 @@
 import * as React from "react";
 
 // UI
-import { Text, View } from "react-native";
+import { Text, View, StatusBar } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 // NAVIGATION

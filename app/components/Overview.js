@@ -84,14 +84,14 @@ function Overview(props) {
               {item.role}
             </Text>
           </View>
-          <View style={styles.characterDetails}>
+          <View style={styles.voiceActorDetails}>
             <Text
               style={[
                 styles.characterDetailsName,
                 { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
               ]}
             >
-              {item.node.name.full}
+              {item.voiceActors[0].name.full}
             </Text>
             <Text
               style={[
@@ -99,7 +99,7 @@ function Overview(props) {
                 { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
               ]}
             >
-              {item.role}
+              {item.voiceActors[0].language}
             </Text>
           </View>
         </View>
@@ -458,14 +458,24 @@ const styles = StyleSheet.create({
   },
   characterDetailsWrapper: {
     flexDirection: "row",
-    alignContent: "space-between",
   },
   characterDetails: {
     padding: SPACING,
     maxWidth: 105,
     justifyContent: "space-between",
+    flexWrap: "wrap",
   },
-  characterDetailsName: { fontSize: 13, fontWeight: "bold" },
+  voiceActorDetails: {
+    padding: SPACING,
+    maxWidth: 105,
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+  },
+  characterDetailsName: {
+    fontSize: 13,
+    fontWeight: "bold",
+    textAlign: "left",
+  },
   characterDetailsOthers: { fontSize: 10, textTransform: "capitalize" },
 });
 

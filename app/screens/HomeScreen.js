@@ -290,7 +290,7 @@ export default function HomeScreen({ navigation }) {
         style={{
           flex: 1,
           backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-          paddingTop: StatusBar.currentHeight + 16,
+          paddingTop: StatusBar.currentHeight,
         }}
       >
         {/* THEME SWITCH */}
