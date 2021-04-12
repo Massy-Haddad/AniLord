@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 
+const regex = /(<([^>]+)>)/gi;
 const SPACING = 8;
 
 function Overview(props) {
@@ -311,7 +312,7 @@ function Overview(props) {
             },
           ]}
         >
-          {props.item.description}
+          {props.item.description.replace(regex, "")}
         </Text>
       </View>
 
