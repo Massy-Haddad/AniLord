@@ -41,13 +41,13 @@ export default function SearchScreen({ navigation }) {
   const [searchInput, setSearchInput] = useState("demon slayer");
 
   // GRAPHQL
-  const [getSearch, { data, loading }] = useLazyQuery(SEARCH_QUERY);
+  const [getSearch, { data: searchData, loading }] = useLazyQuery(SEARCH_QUERY);
 
   useEffect(() => {
-    if (data && data.Page.media) {
-      setAnimeList(data.Page.media);
+    if (searchData) {
+      setAnimeList(searchData.Page.media);
     }
-  }, [animeList, data]);
+  }, [animeList, searchData]);
 
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);

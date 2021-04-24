@@ -66,48 +66,101 @@ function Overview(props) {
           style={styles.characterCoverImage}
           source={{ uri: item.node.image.large }}
         />
-        <View style={styles.characterDetailsWrapper}>
-          <View style={styles.characterDetails}>
-            <Text
-              style={[
-                styles.characterDetailsName,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              {item.node.name.full}
-            </Text>
-            <Text
-              style={[
-                styles.characterDetailsOthers,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              {item.role}
-            </Text>
-          </View>
-          <View style={styles.voiceActorDetails}>
-            <Text
-              style={[
-                styles.characterDetailsName,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              {item.voiceActors[0].name.full}
-            </Text>
-            <Text
-              style={[
-                styles.characterDetailsOthers,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              {item.voiceActors[0].language}
-            </Text>
-          </View>
+        <View style={styles.characterDetails}>
+          <Text
+            style={[
+              styles.characterDetailsName,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.node.name.full}
+          </Text>
+          <Text
+            style={[
+              styles.characterDetailsOthers,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.role}
+          </Text>
+        </View>
+        <View style={styles.characterDetails}>
+          <Text
+            style={[
+              styles.characterDetailsName,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.voiceActors[0].name.full}
+          </Text>
+          <Text
+            style={[
+              styles.characterDetailsOthers,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.voiceActors[0].language}
+          </Text>
         </View>
         <Image
           style={styles.characterSeiyuuImage}
           source={{ uri: item.voiceActors[0].image.large }}
         />
+      </View>
+    );
+  };
+
+  const renderItemStaff = ({ item }) => {
+    return (
+      <View
+        style={[
+          styles.staff,
+          { backgroundColor: props.theme.PRIMARY_BUTTON_COLOR },
+        ]}
+      >
+        <Image
+          style={styles.characterCoverImage}
+          source={{ uri: item.node.image.large }}
+        />
+        <View style={styles.characterDetails}>
+          <Text
+            style={[
+              styles.characterDetailsName,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.node.name.full}
+          </Text>
+          <Text
+            style={[
+              styles.characterDetailsOthers,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.role}
+          </Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderItemRecommendations = ({ item }) => {
+    return (
+      <View style={styles.recommendation}>
+        <Image
+          style={styles.recommendationCoverImage}
+          source={{ uri: item.node.image.large }}
+        />
+        <View style={styles.recommendationDetails}>
+          <Text
+            style={[
+              styles.characterDetailsName,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.node.name.full}
+          </Text>
+        </View>
       </View>
     );
   };
@@ -331,7 +384,6 @@ function Overview(props) {
           showsHorizontalScrollIndicator={false}
           data={props.item.relations.edges}
           renderItem={renderItem}
-          numColumns={1}
         />
       </View>
 
@@ -349,7 +401,42 @@ function Overview(props) {
           showsVerticalScrollIndicator={false}
           data={props.item.characterPreview.edges}
           renderItem={renderItemCharacters}
-          numColumns={1}
+        />
+      </View>
+
+      {/* STAFF */}
+      <Text
+        style={[
+          styles.contentTitle,
+          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+        ]}
+      >
+        Staff
+      </Text>
+      <View style={styles.characters}>
+        <FlatList
+          numColumns={2}
+          showsVerticalScrollIndicator={false}
+          data={props.item.staffPreview.edges}
+          renderItem={renderItemStaff}
+        />
+      </View>
+
+      {/* RECOMMENDATIONS */}
+      <Text
+        style={[
+          styles.contentTitle,
+          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+        ]}
+      >
+        Recommendations
+      </Text>
+      <View style={styles.characters}>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={props.item.staffPreview.edges}
+          renderItem={renderItemRecommendations}
         />
       </View>
     </ScrollView>
@@ -412,8 +499,8 @@ const styles = StyleSheet.create({
   relation: {
     flexDirection: "row",
     marginRight: SPACING * 3 + 1,
-    minWidth: 250,
-    maxWidth: 400,
+    minWidth: 300,
+    maxWidth: 300,
     borderRadius: 3,
   },
   relationCoverImage: {
@@ -426,6 +513,7 @@ const styles = StyleSheet.create({
   relationDetails: {
     padding: SPACING + 4,
     justifyContent: "space-between",
+    flexShrink: 1,
   },
   relationType: { textTransform: "capitalize" },
   relationTitle: {
@@ -457,27 +545,47 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 3,
     borderBottomRightRadius: 3,
   },
-  characterDetailsWrapper: {
-    flexDirection: "row",
-  },
   characterDetails: {
     padding: SPACING,
-    maxWidth: 105,
     justifyContent: "space-between",
-    flexWrap: "wrap",
-  },
-  voiceActorDetails: {
-    padding: SPACING,
-    maxWidth: 105,
-    justifyContent: "space-between",
-    flexWrap: "wrap",
+    flexShrink: 1,
   },
   characterDetailsName: {
     fontSize: 13,
     fontWeight: "bold",
-    textAlign: "left",
   },
-  characterDetailsOthers: { fontSize: 10, textTransform: "capitalize" },
+  characterDetailsOthers: {
+    fontSize: 10,
+    textTransform: "capitalize",
+  },
+
+  // STAFF
+  staff: {
+    flexDirection: "row",
+    height: 75,
+    borderRadius: 3,
+    marginBottom: SPACING * 3 - 2,
+    minWidth: "50%",
+    maxWidth: "50%",
+    marginRight: "5%",
+    // maxWidth: 150,
+  },
+
+  // RECOMMENDATIONS
+  recommendation: {
+    flexDirection: "column",
+    marginRight: 20,
+  },
+  recommendationCoverImage: {
+    width: 100,
+    height: undefined,
+    aspectRatio: 130 / 180,
+    borderRadius: 4,
+  },
+  recommendationDetails: {
+    paddingTop: SPACING - 2,
+    flexShrink: 1,
+  },
 });
 
 export default Overview;

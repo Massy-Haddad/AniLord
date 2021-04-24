@@ -41,8 +41,6 @@ const DetailScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const theme = useSelector((state) => state.themeReducer.theme);
 
-  const [trending, setTrending] = useState([]);
-
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaView
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
   // OTHERS
   close: {
     position: "absolute",
-    top: Platform.OS === "ios" ? SPACING * 3 : StatusBar.currentHeight,
+    top: Platform.OS === "ios" ? SPACING * 3 : SPACING,
     right: SPACING * 2,
     zIndex: 2,
     textShadowColor: "black",

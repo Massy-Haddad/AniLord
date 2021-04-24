@@ -172,6 +172,22 @@ export default function HomeScreen({ navigation }) {
         }
       }
     }
+    staffPreview: staff(perPage: 4, sort: [RELEVANCE, ID]) {
+      edges {
+        id
+        role
+        node {
+          id
+          name {
+            full
+          }
+          language: languageV2
+          image {
+            large
+          }
+        }
+      }
+    }
   }
 `;
 
