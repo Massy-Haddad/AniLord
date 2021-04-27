@@ -21,6 +21,8 @@ import { SharedElement } from "react-navigation-shared-element";
 // THEME
 import { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
+
+// COMPONENTS
 import Overview from "../components/Overview";
 
 // NAVIGATION
@@ -49,8 +51,8 @@ const DetailScreen = ({ navigation, route }) => {
           { backgroundColor: theme.PRIMARY_BUTTON_COLOR },
         ]}
       >
-        {console.log(item)}
-        {console.log(Object.keys(item))}
+        {/* {console.log(item)} */}
+        {/* {console.log(Object.keys(item))} */}
         {/* {console.log(Object.values(item))} */}
 
         {/* CLOSE */}
@@ -127,7 +129,7 @@ const DetailScreen = ({ navigation, route }) => {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          {<Overview item={item} theme={theme} />}
+          {<Overview mediaId={item.id} theme={theme} />}
         </View>
       </SafeAreaView>
     </ThemeProvider>

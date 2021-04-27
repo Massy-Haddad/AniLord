@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -7,11 +7,23 @@ import {
   FlatList,
   Image,
 } from "react-native";
+// GRAPHQL
+import { useQuery } from "react-apollo";
+import { MEDIA_OVERVIEW } from "../services/media";
 
+// VARIABLES
 const regex = /(<([^>]+)>)/gi;
 const SPACING = 8;
 
 function Overview(props) {
+  // GRAPHQL
+  const { loading, error, data } = useQuery(MEDIA_OVERVIEW, {
+    variables: { id: props.mediaId },
+    suspend: false,
+  });
+
+  useEffect(() => {}, [data]);
+
   const renderItem = ({ item }) => {
     return (
       <View
@@ -91,7 +103,7 @@ function Overview(props) {
               { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
             ]}
           >
-            {item.voiceActors[0].name.full}
+            {item?.voiceActors[0]?.name?.full}
           </Text>
           <Text
             style={[
@@ -99,12 +111,12 @@ function Overview(props) {
               { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
             ]}
           >
-            {item.voiceActors[0].language}
+            {item?.voiceActors[0]?.language}
           </Text>
         </View>
         <Image
           style={styles.characterSeiyuuImage}
-          source={{ uri: item.voiceActors[0].image.large }}
+          source={{ uri: item?.voiceActors[0]?.image?.large }}
         />
       </View>
     );
@@ -164,283 +176,288 @@ function Overview(props) {
       </View>
     );
   };
+  if (loading) {
+    return <Text>LOADING</Text>;
+  }
 
-  return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {/* GENRES */}
-      <View style={styles.genres}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {props.item.genres.map((genre) => (
-            <View
-              style={[
-                styles.genre,
-                { backgroundColor: props.item.coverImage.color },
-              ]}
-            >
-              <Text style={styles.genreText}>{genre}</Text>
+  if (!loading) {
+    return (
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* GENRES */}
+        <View style={styles.genres}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {data.Media.genres.map((genre) => (
+              <View
+                style={[
+                  styles.genre,
+                  { backgroundColor: data.Media.coverImage.color },
+                ]}
+              >
+                <Text style={styles.genreText}>{genre}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
+
+        {/* DETAILS */}
+        <View
+          style={[
+            styles.details,
+            { backgroundColor: props.theme.PRIMARY_BUTTON_COLOR },
+          ]}
+        >
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Format
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.format}
+              </Text>
             </View>
-          ))}
-        </ScrollView>
-      </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Episodes
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.episodes}
+              </Text>
+            </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Episode duration
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.duration + " minutes"}
+              </Text>
+            </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Status
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.status?.toLowerCase()}
+              </Text>
+            </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Start date
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.startDate?.day +
+                  "/" +
+                  data.Media?.startDate?.month +
+                  "/" +
+                  data.Media?.startDate?.year}
+              </Text>
+            </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                End date
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.endDate?.day +
+                  "/" +
+                  data.Media?.endDate?.month +
+                  "/" +
+                  data.Media?.endDate?.year}
+              </Text>
+            </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Season
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.season?.toLowerCase()}
+              </Text>
+            </View>
+            <View style={styles.detail}>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+                ]}
+              >
+                Studio
+              </Text>
+              <Text
+                style={[
+                  styles.detailText,
+                  { color: props.theme.PRIMARY_TEXT_COLOR },
+                ]}
+              >
+                {data.Media?.studios?.edges[0]?.node?.name}
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
 
-      {/* DETAILS */}
-      <View
-        style={[
-          styles.details,
-          { backgroundColor: props.theme.PRIMARY_BUTTON_COLOR },
-        ]}
-      >
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Format
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.format}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Episodes
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.episodes}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Episode duration
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.duration + " minutes"}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Status
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.status?.toLowerCase()}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Start date
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.startDate?.day +
-                "/" +
-                props.item?.startDate?.month +
-                "/" +
-                props.item?.startDate?.year}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              End date
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.endDate?.day +
-                "/" +
-                props.item?.endDate?.month +
-                "/" +
-                props.item?.endDate?.year}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Season
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.season?.toLowerCase()}
-            </Text>
-          </View>
-          <View style={styles.detail}>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
-            >
-              Studio
-            </Text>
-            <Text
-              style={[
-                styles.detailText,
-                { color: props.theme.PRIMARY_TEXT_COLOR },
-              ]}
-            >
-              {props.item?.studios?.edges[0]?.node?.name}
-            </Text>
-          </View>
-        </ScrollView>
-      </View>
+        {/* DESCRIPTION */}
+        <View style={styles.description}>
+          <Text
+            style={[
+              styles.contentTitle,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            Description
+          </Text>
+          <Text
+            style={[
+              styles.descriptionText,
+              {
+                backgroundColor: props.theme.PRIMARY_BUTTON_COLOR,
+                color: props.theme.PRIMARY_BUTTON_TEXT_COLOR,
+              },
+            ]}
+          >
+            {data.Media.description.replace(regex, "")}
+          </Text>
+        </View>
 
-      {/* DESCRIPTION */}
-      <View style={styles.description}>
+        {/* RELATIONs */}
         <Text
           style={[
             styles.contentTitle,
             { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
           ]}
         >
-          Description
+          Relations
         </Text>
+        <View style={styles.relations}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={data.Media.relations.edges}
+            renderItem={renderItem}
+          />
+        </View>
+
+        {/* CHARACTERS */}
         <Text
           style={[
-            styles.descriptionText,
-            {
-              backgroundColor: props.theme.PRIMARY_BUTTON_COLOR,
-              color: props.theme.PRIMARY_BUTTON_TEXT_COLOR,
-            },
+            styles.contentTitle,
+            { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
           ]}
         >
-          {props.item.description.replace(regex, "")}
+          Characters
         </Text>
-      </View>
+        <View style={styles.characters}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={data.Media.characterPreview.edges}
+            renderItem={renderItemCharacters}
+          />
+        </View>
 
-      {/* RELATIONs */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Relations
-      </Text>
-      <View style={styles.relations}>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={props.item.relations.edges}
-          renderItem={renderItem}
-        />
-      </View>
+        {/* STAFF */}
+        <Text
+          style={[
+            styles.contentTitle,
+            { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+          ]}
+        >
+          Staff
+        </Text>
+        <View style={styles.characters}>
+          <FlatList
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            data={data.Media.staffPreview.edges}
+            renderItem={renderItemStaff}
+          />
+        </View>
 
-      {/* CHARACTERS */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Characters
-      </Text>
-      <View style={styles.characters}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={props.item.characterPreview.edges}
-          renderItem={renderItemCharacters}
-        />
-      </View>
-
-      {/* STAFF */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Staff
-      </Text>
-      <View style={styles.characters}>
-        <FlatList
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          data={props.item.staffPreview.edges}
-          renderItem={renderItemStaff}
-        />
-      </View>
-
-      {/* RECOMMENDATIONS */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Recommendations
-      </Text>
-      <View style={styles.characters}>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={props.item.staffPreview.edges}
-          renderItem={renderItemRecommendations}
-        />
-      </View>
-    </ScrollView>
-  );
+        {/* RECOMMENDATIONS */}
+        <Text
+          style={[
+            styles.contentTitle,
+            { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+          ]}
+        >
+          Recommendations
+        </Text>
+        <View style={styles.characters}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={data.Media.staffPreview.edges}
+            renderItem={renderItemRecommendations}
+          />
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({

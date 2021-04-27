@@ -1,8 +1,8 @@
-import { lightTheme } from "../../Theme";
+import { darkTheme, lightTheme } from "../../Theme";
 import { SWITCH_THEME } from "./themeActions";
 
 const initialState = {
-  theme: lightTheme,
+  theme: darkTheme,
 };
 
 const themeReducer = (state = initialState, action) => {
