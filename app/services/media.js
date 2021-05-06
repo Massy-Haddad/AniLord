@@ -446,3 +446,48 @@ export const MEDIA_OVERVIEW = gql`
     }
   }
 `;
+
+export const MEDIA_CHARACTERS = gql`
+  query media($id: Int, $page: Int, $language: StaffLanguage) {
+    Media(id: $id) {
+      id
+      characters(page: $page, sort: [ROLE, RELEVANCE, ID]) {
+        pageInfo {
+          total
+          perPage
+          currentPage
+          lastPage
+          hasNextPage
+        }
+        edges {
+          id
+          role
+          name
+          voiceActorRoles(sort: [RELEVANCE, ID], language: $language) {
+            roleNotes
+            dubGroup
+            voiceActor {
+              id
+              name {
+                full
+              }
+              language: languageV2
+              image {
+                large
+              }
+            }
+          }
+          node {
+            id
+            name {
+              full
+            }
+            image {
+              large
+            }
+          }
+        }
+      }
+    }
+  }
+`;

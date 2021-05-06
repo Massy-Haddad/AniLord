@@ -24,6 +24,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 // COMPONENTS
 import Overview from "../components/Overview";
+import Characters from "../components/Characters";
 
 // NAVIGATION
 import { NavigationContainer } from "@react-navigation/native";
@@ -51,10 +52,6 @@ const DetailScreen = ({ navigation, route }) => {
           { backgroundColor: theme.PRIMARY_BUTTON_COLOR },
         ]}
       >
-        {/* {console.log(item)} */}
-        {/* {console.log(Object.keys(item))} */}
-        {/* {console.log(Object.values(item))} */}
-
         {/* CLOSE */}
         <MaterialCommunityIcons
           name="close"
@@ -130,6 +127,7 @@ const DetailScreen = ({ navigation, route }) => {
           ]}
         >
           {<Overview mediaId={item.id} theme={theme} />}
+          {/* {<Characters mediaId={item.id} theme={theme} />} */}
         </View>
       </SafeAreaView>
     </ThemeProvider>
