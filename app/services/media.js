@@ -1,5 +1,7 @@
 import gql from "graphql-tag";
 
+// ALL REQUESTS CONCERNING MEDIAS
+
 export const PROFILE_QUERY = gql`
   query($userName: String, $type: MediaType) {
     MediaListCollection(userName: $userName, type: $type) {
@@ -216,6 +218,69 @@ export const SEARCH_QUERY = gql`
               id
               name
             }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const MEDIA_GENERAL_INFORMATIONS = gql`
+  query media($id: Int, $type: MediaType, $isAdult: Boolean) {
+    Media(id: $id, type: $type, isAdult: $isAdult) {
+      id
+      title {
+        userPreferred
+        romaji
+        english
+        native
+      }
+      coverImage {
+        extraLarge
+        large
+        color
+      }
+      bannerImage
+      startDate {
+        year
+        month
+        day
+      }
+      endDate {
+        year
+        month
+        day
+      }
+      description
+      season
+      seasonYear
+      type
+      format
+      status(version: 2)
+      episodes
+      duration
+      chapters
+      volumes
+      genres
+      synonyms
+      source(version: 2)
+      isAdult
+      isLocked
+      meanScore
+      averageScore
+      popularity
+      favourites
+      hashtag
+      countryOfOrigin
+      isLicensed
+      isFavourite
+      isRecommendationBlocked
+      studios {
+        edges {
+          isMain
+          node {
+            id
+            name
           }
         }
       }
@@ -486,6 +551,79 @@ export const MEDIA_CHARACTERS = gql`
               large
             }
           }
+        }
+      }
+    }
+  }
+`;
+
+export const MEDIA_STAFF = gql`
+  query media($id: Int, $page: Int) {
+    Media(id: $id) {
+      id
+      staff(page: $page, sort: [RELEVANCE, ID]) {
+        pageInfo {
+          total
+          perPage
+          currentPage
+          lastPage
+          hasNextPage
+        }
+        edges {
+          id
+          role
+          node {
+            id
+            name {
+              full
+            }
+            image {
+              large
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const MEDIA_STATS = gql`
+  query($id: Int) {
+    Media(id: $id) {
+      id
+      rankings {
+        id
+        rank
+        type
+        format
+        year
+        season
+        allTime
+        context
+      }
+      trends(sort: ID_DESC) {
+        nodes {
+          averageScore
+          date
+          trending
+          popularity
+        }
+      }
+      airingTrends: trends(releasing: true, sort: EPISODE_DESC) {
+        nodes {
+          averageScore
+          inProgress
+          episode
+        }
+      }
+      distribution: stats {
+        status: statusDistribution {
+          status
+          amount
+        }
+        score: scoreDistribution {
+          score
+          amount
         }
       }
     }

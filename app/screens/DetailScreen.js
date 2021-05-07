@@ -23,8 +23,11 @@ import { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 
 // COMPONENTS
+import Details from "../components/Details";
 import Overview from "../components/Overview";
 import Characters from "../components/Characters";
+import Staff from "../components/Staff";
+import Stats from "../components/Stats";
 
 // NAVIGATION
 import { NavigationContainer } from "@react-navigation/native";
@@ -115,7 +118,7 @@ const DetailScreen = ({ navigation, route }) => {
           </ScrollView>
         </View>
 
-        {/* OVERVIEW */}
+        {/* COMPONENTS */}
         {/* <NavigationContainer independent={true}>
           <DetailScreenTab screenProps={{ theme: theme }} />
         </NavigationContainer> */}
@@ -126,8 +129,11 @@ const DetailScreen = ({ navigation, route }) => {
             { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
           ]}
         >
-          {<Overview mediaId={item.id} theme={theme} />}
-          {/* {<Characters mediaId={item.id} theme={theme} />} */}
+          {<Details theme={theme} mediaId={item.id} mediaType={item.type} />}
+          {/* {<Overview theme={theme} mediaId={item.id} mediaType={item.type} />} */}
+          {/* {<Characters theme={theme} mediaId={item.id} mediaType={item.type} />} */}
+          {/* {<Staff theme={theme} mediaId={item.id} mediaType={item.type} />} */}
+          {<Stats theme={theme} mediaId={item.id} />}
         </View>
       </SafeAreaView>
     </ThemeProvider>
