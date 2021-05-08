@@ -90,23 +90,38 @@ function Characters(props) {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {/* CHARACTERS */}
-      <View style={styles.characters.edges}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={data.Media.characters.edges}
-          extraData={data}
-          renderItem={renderItemCharacters}
-          onRefresh={() => refetch}
-          refreshing={loading}
-        />
-      </View>
-    </ScrollView>
+    <View
+      style={[
+        styles.content,
+        { backgroundColor: props.theme.PRIMARY_BACKGROUND_COLOR },
+      ]}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* CHARACTERS */}
+        <View style={styles.characters.edges}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={data.Media.characters.edges}
+            extraData={data}
+            renderItem={renderItemCharacters}
+            onRefresh={() => refetch}
+            refreshing={loading}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // CONTENT
+  content: {
+    flex: 1,
+    paddingTop: SPACING * 3,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+
   // CHARACTERS
   characters: { marginBottom: SPACING * 4 - 2 },
   character: {

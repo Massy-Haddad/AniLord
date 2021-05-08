@@ -12,6 +12,7 @@ import {
 import { useQuery } from "react-apollo";
 import { MEDIA_OVERVIEW } from "../services/media";
 import Loading from "./Loading";
+import Details from "./Details";
 
 // VARIABLES
 const regex = /(<([^>]+)>)/gi;
@@ -184,122 +185,142 @@ function Overview(props) {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {/* GENRES */}
-      <View style={styles.genres}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {data.Media.genres.map((genre) => (
-            <View
-              style={[
-                styles.genre,
-                { backgroundColor: data.Media.coverImage.color },
-              ]}
-            >
-              <Text style={styles.genreText}>{genre}</Text>
-            </View>
-          ))}
-        </ScrollView>
-      </View>
+    <View
+      style={[
+        styles.content,
+        { backgroundColor: props.theme.PRIMARY_BACKGROUND_COLOR },
+      ]}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* GENRES */}
+        <View style={styles.genres}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {data.Media.genres.map((genre) => (
+              <View
+                style={[
+                  styles.genre,
+                  { backgroundColor: data.Media.coverImage.color },
+                ]}
+              >
+                <Text style={styles.genreText}>{genre}</Text>
+              </View>
+            ))}
+          </ScrollView>
+        </View>
 
-      {/* DESCRIPTION */}
-      <View style={styles.description}>
+        {/* DETAILS */}
+        <Details
+          theme={props.theme}
+          mediaId={data.Media.id}
+          mediaType={data.Media.type}
+        />
+
+        {/* DESCRIPTION */}
+        <View style={styles.description}>
+          <Text
+            style={[
+              styles.contentTitle,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            Description
+          </Text>
+          <Text
+            style={[
+              styles.descriptionText,
+              {
+                backgroundColor: props.theme.PRIMARY_BUTTON_COLOR,
+                color: props.theme.PRIMARY_BUTTON_TEXT_COLOR,
+              },
+            ]}
+          >
+            {data.Media.description.replace(regex, "")}
+          </Text>
+        </View>
+
+        {/* RELATIONs */}
         <Text
           style={[
             styles.contentTitle,
             { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
           ]}
         >
-          Description
+          Relations
         </Text>
+        <View style={styles.relations}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={data.Media.relations.edges}
+            renderItem={renderItem}
+          />
+        </View>
+
+        {/* CHARACTERS */}
         <Text
           style={[
-            styles.descriptionText,
-            {
-              backgroundColor: props.theme.PRIMARY_BUTTON_COLOR,
-              color: props.theme.PRIMARY_BUTTON_TEXT_COLOR,
-            },
+            styles.contentTitle,
+            { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
           ]}
         >
-          {data.Media.description.replace(regex, "")}
+          Characters
         </Text>
-      </View>
+        <View style={styles.characters}>
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            data={data.Media.characterPreview.edges}
+            renderItem={renderItemCharacters}
+          />
+        </View>
 
-      {/* RELATIONs */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Relations
-      </Text>
-      <View style={styles.relations}>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={data.Media.relations.edges}
-          renderItem={renderItem}
-        />
-      </View>
+        {/* STAFF */}
+        <Text
+          style={[
+            styles.contentTitle,
+            { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+          ]}
+        >
+          Staff
+        </Text>
+        <View style={styles.characters}>
+          <FlatList
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            data={data.Media.staffPreview.edges}
+            renderItem={renderItemStaff}
+          />
+        </View>
 
-      {/* CHARACTERS */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Characters
-      </Text>
-      <View style={styles.characters}>
-        <FlatList
-          showsVerticalScrollIndicator={false}
-          data={data.Media.characterPreview.edges}
-          renderItem={renderItemCharacters}
-        />
-      </View>
-
-      {/* STAFF */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Staff
-      </Text>
-      <View style={styles.characters}>
-        <FlatList
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          data={data.Media.staffPreview.edges}
-          renderItem={renderItemStaff}
-        />
-      </View>
-
-      {/* RECOMMENDATIONS */}
-      <Text
-        style={[
-          styles.contentTitle,
-          { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
-        ]}
-      >
-        Recommendations
-      </Text>
-      <View style={styles.characters}>
-        <FlatList
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          data={data.Media.staffPreview.edges}
-          renderItem={renderItemRecommendations}
-        />
-      </View>
-    </ScrollView>
+        {/* RECOMMENDATIONS */}
+        <Text
+          style={[
+            styles.contentTitle,
+            { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+          ]}
+        >
+          Recommendations
+        </Text>
+        <View style={styles.characters}>
+          <FlatList
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            data={data.Media.staffPreview.edges}
+            renderItem={renderItemRecommendations}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   // CONTENT
+  content: {
+    flex: 1,
+    paddingTop: SPACING * 3,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
   contentTitle: {
     marginBottom: 10,
     fontSize: 16,

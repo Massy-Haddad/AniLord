@@ -28,8 +28,10 @@ import Overview from "../components/Overview";
 import Characters from "../components/Characters";
 import Staff from "../components/Staff";
 import Stats from "../components/Stats";
+import Searchbar from "../components/SearchBar";
 
 // NAVIGATION
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import DetailScreenTab from "../navigation/DetailScreenTab";
 
@@ -46,6 +48,8 @@ const sections = [
 const DetailScreen = ({ navigation, route }) => {
   const { item } = route.params;
   const theme = useSelector((state) => state.themeReducer.theme);
+
+  const Tab = createMaterialTopTabNavigator();
 
   return (
     <ThemeProvider theme={theme}>
@@ -65,7 +69,6 @@ const DetailScreen = ({ navigation, route }) => {
             navigation.goBack();
           }}
         />
-
         {/* HEADER */}
         <Image
           source={{ uri: item.bannerImage }}
@@ -88,7 +91,6 @@ const DetailScreen = ({ navigation, route }) => {
             <MaterialCommunityIcons name="heart" size={25} color="#ffaebc" />
           </TouchableOpacity>
         </View>
-
         <View style={styles.headerSections}>
           <SharedElement id={`item.${item.id}.title`}>
             <Text
@@ -97,7 +99,7 @@ const DetailScreen = ({ navigation, route }) => {
               {item.title.userPreferred}
             </Text>
           </SharedElement>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {sections.map((section) => (
               <TouchableOpacity style={styles.section}>
                 <Text
@@ -115,26 +117,49 @@ const DetailScreen = ({ navigation, route }) => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </ScrollView>
+          </ScrollView> */}
         </View>
 
         {/* COMPONENTS */}
-        {/* <NavigationContainer independent={true}>
-          <DetailScreenTab screenProps={{ theme: theme }} />
-        </NavigationContainer> */}
-
-        <View
-          style={[
-            styles.content,
-            { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
-          ]}
+        <Tab.Navigator
+          tabBarOptions={{
+            activeTintColor: theme.PRIMARY_TEXT_COLOR,
+            inactiveTintColor: theme.PRIMARY_BUTTON_TEXT_COLOR,
+            indicatorStyle: { backgroundColor: theme.PRIMARY_TEXT_COLOR },
+            style: {
+              backgroundColor: theme.PRIMARY_BUTTON_COLOR,
+            },
+          }}
         >
-          {<Details theme={theme} mediaId={item.id} mediaType={item.type} />}
-          {/* {<Overview theme={theme} mediaId={item.id} mediaType={item.type} />} */}
-          {/* {<Characters theme={theme} mediaId={item.id} mediaType={item.type} />} */}
-          {/* {<Staff theme={theme} mediaId={item.id} mediaType={item.type} />} */}
-          {<Stats theme={theme} mediaId={item.id} />}
-        </View>
+          <Tab.Screen
+            name="Overview"
+            children={() => (
+              <Overview theme={theme} mediaId={item.id} mediaType={item.type} />
+            )}
+          />
+          <Tab.Screen
+            name="Characters"
+            children={() => (
+              <Characters
+                theme={theme}
+                mediaId={item.id}
+                mediaType={item.type}
+              />
+            )}
+          />
+          <Tab.Screen
+            name="Staff"
+            children={() => (
+              <Staff theme={theme} mediaId={item.id} mediaType={item.type} />
+            )}
+          />
+          {/* <Tab.Screen
+            name="Stats"
+            children={() => (
+              <Stats theme={theme} mediaId={item.id} mediaType={item.type} />
+            )}
+          /> */}
+        </Tab.Navigator>
       </SafeAreaView>
     </ThemeProvider>
   );

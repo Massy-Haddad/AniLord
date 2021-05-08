@@ -66,21 +66,36 @@ function Staff(props) {
   }
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      {/* STAFF */}
-      <View style={styles.characters}>
-        <FlatList
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          data={data.Media.staff.edges}
-          renderItem={renderItemStaff}
-        />
-      </View>
-    </ScrollView>
+    <View
+      style={[
+        styles.content,
+        { backgroundColor: props.theme.PRIMARY_BACKGROUND_COLOR },
+      ]}
+    >
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* STAFF */}
+        <View style={styles.characters}>
+          <FlatList
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            data={data.Media.staff.edges}
+            renderItem={renderItemStaff}
+          />
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  // CONTENT
+  content: {
+    flex: 1,
+    paddingTop: SPACING * 3,
+    paddingLeft: 20,
+    paddingRight: 20,
+  },
+
   // STAFF
   staff: {
     flexDirection: "row",
