@@ -218,7 +218,6 @@ export default function HomeScreen({ navigation }) {
   }
 
   function handleData(data) {
-    //console.log(data.data.trending.media);
     setTrending(data.data.trending.media);
     setSeason(data.data.season.media);
     setNextSeason(data.data.nextSeason.media);
@@ -242,9 +241,10 @@ export default function HomeScreen({ navigation }) {
           <SharedElement id={`item.${item.id}.image_url`}>
             <Image
               style={{
-                borderRadius: 14,
-                width: ITEM_WIDTH * 0.5,
-                height: ITEM_HEIGHT * 0.8,
+                borderRadius: 6,
+                width: 125,
+                height: undefined,
+                aspectRatio: 60 / 82,
                 marginHorizontal: 6,
               }}
               source={{ uri: item.coverImage.extraLarge }}
@@ -271,9 +271,9 @@ export default function HomeScreen({ navigation }) {
                   <Text
                     style={{
                       color: "white",
-                      fontSize: 20,
+                      fontSize: 16,
                       fontWeight: "bold",
-                      lineHeight: 28,
+                      // lineHeight: 28,
                       fontFamily: "Overpass_900Black",
                     }}
                   >
@@ -306,118 +306,173 @@ export default function HomeScreen({ navigation }) {
         style={{
           flex: 1,
           backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-          paddingTop: StatusBar.currentHeight,
         }}
       >
-        {/* THEME SWITCH */}
-        {theme.mode === "light" ? (
-          <MaterialCommunityIcons
-            name="ghost"
-            size={28}
-            color={theme.PRIMARY_BUTTON_TEXT_COLOR}
-            style={{
-              position: "absolute",
-              top: 50,
-              right: 20,
-              zIndex: 2,
-              //backgroundColor: "lightgrey",
-              //borderRadius: 50,
-              //padding: 3,
-            }}
-            onPress={() => dispatch(switchTheme(darkTheme))}
-          />
-        ) : (
-          <MaterialCommunityIcons
-            name="fire"
-            size={28}
-            color={theme.PRIMARY_BUTTON_TEXT_COLOR}
-            style={{
-              position: "absolute",
-              top: 50,
-              right: 20,
-              zIndex: 2,
-              //backgroundColor: "lightgrey",
-              //borderRadius: 50,
-              //padding: 3,
-            }}
-            onPress={() => dispatch(switchTheme(lightTheme))}
-          />
-        )}
-        {/* Header */}
-        <View
-          style={{
-            marginHorizontal: 18,
+        <ScrollView
+          contentContainerStyle={{
+            paddingBottom: 80,
+            paddingTop: StatusBar.currentHeight,
           }}
         >
-          {/*
+          {/* THEME SWITCH */}
+          {theme.mode === "light" ? (
+            <MaterialCommunityIcons
+              name="ghost"
+              size={28}
+              color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+              style={{
+                position: "absolute",
+                top: 40,
+                right: 20,
+                zIndex: 2,
+                //backgroundColor: "lightgrey",
+                //borderRadius: 50,
+                //padding: 3,
+              }}
+              onPress={() => dispatch(switchTheme(darkTheme))}
+            />
+          ) : (
+            <MaterialCommunityIcons
+              name="fire"
+              size={28}
+              color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+              style={{
+                position: "absolute",
+                top: 40,
+                right: 20,
+                zIndex: 2,
+                //backgroundColor: "lightgrey",
+                //borderRadius: 50,
+                //padding: 3,
+              }}
+              onPress={() => dispatch(switchTheme(lightTheme))}
+            />
+          )}
+          {/* Header */}
+          <View
+            style={{
+              marginHorizontal: 18,
+            }}
+          >
+            {/*
         <Text style={{ color: "#888", textTransform: "uppercase" }}>
           AniList client
         </Text>
         */}
-          <Text
-            style={{
-              color: theme.PRIMARY_TEXT_COLOR,
-              fontSize: 32,
-              fontWeight: "600",
-            }}
-          >
-            Discover
-          </Text>
-        </View>
-        {/* <View style={{ marginRight: 20, marginLeft: 20 }}>
+            <Text
+              style={{
+                color: theme.PRIMARY_TEXT_COLOR,
+                fontSize: 32,
+                fontWeight: "600",
+              }}
+            >
+              Discover
+            </Text>
+          </View>
+          {/* <View style={{ marginRight: 20, marginLeft: 20 }}>
           <SearchBar />
         </View> */}
 
-        {/* Scrollable content */}
-        <View style={{ flex: 1, padding: 20 }}>
-          <Text
-            style={{
-              color: theme.SECONDARY_TEXT_COLOR,
-              textTransform: "uppercase",
-              marginBottom: 12,
-              fontSize: 16,
-            }}
-          >
-            This season
-          </Text>
-          <FlatList
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            data={season}
-            keyExtractor={(item) => item.id.toString()}
-            key={(item) => item.id.toString()}
-            renderItem={renderItem}
-          />
+          {/* Scrollable content */}
+          <View style={{ flex: 1, padding: 20 }}>
+            <Text
+              style={{
+                color: theme.SECONDARY_TEXT_COLOR,
+                textTransform: "uppercase",
+                marginBottom: 12,
+                fontSize: 16,
+              }}
+            >
+              This season
+            </Text>
+            <FlatList
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
+              data={season}
+              keyExtractor={(item) => item.id.toString()}
+              key={(item) => item.id.toString()}
+              renderItem={renderItem}
+            />
 
-          <Text
-            style={{
-              color: theme.SECONDARY_TEXT_COLOR,
-              textTransform: "uppercase",
-              marginBottom: 12,
-            }}
-          >
-            Upcoming season
-          </Text>
-          <FlatList
-            horizontal={true}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            data={nextSeason}
-            keyExtractor={(item) => item.id.toString()}
-            key={(item) => item.id.toString()}
-            renderItem={renderItem}
-          />
-        </View>
+            <Text
+              style={{
+                color: theme.SECONDARY_TEXT_COLOR,
+                textTransform: "uppercase",
+                marginBottom: 12,
+              }}
+            >
+              Upcoming season
+            </Text>
+            <FlatList
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={nextSeason}
+              keyExtractor={(item) => item.id.toString()}
+              key={(item) => item.id.toString()}
+              renderItem={renderItem}
+            />
+
+            <Text
+              style={{
+                color: theme.SECONDARY_TEXT_COLOR,
+                textTransform: "uppercase",
+                marginBottom: 12,
+              }}
+            >
+              Popular
+            </Text>
+            <FlatList
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={popular}
+              keyExtractor={(item) => item.id.toString()}
+              key={(item) => item.id.toString()}
+              renderItem={renderItem}
+            />
+
+            <Text
+              style={{
+                color: theme.SECONDARY_TEXT_COLOR,
+                textTransform: "uppercase",
+                marginBottom: 12,
+              }}
+            >
+              Trending
+            </Text>
+            <FlatList
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={trending}
+              keyExtractor={(item) => item.id.toString()}
+              key={(item) => item.id.toString()}
+              renderItem={renderItem}
+            />
+
+            <Text
+              style={{
+                color: theme.SECONDARY_TEXT_COLOR,
+                textTransform: "uppercase",
+                marginBottom: 12,
+              }}
+            >
+              Top
+            </Text>
+            <FlatList
+              horizontal={true}
+              showsVerticalScrollIndicator={false}
+              showsHorizontalScrollIndicator={false}
+              data={top}
+              keyExtractor={(item) => item.id.toString()}
+              key={(item) => item.id.toString()}
+              renderItem={renderItem}
+            />
+          </View>
+        </ScrollView>
       </SafeAreaView>
     </ThemeProvider>
   );
 }
-
-// const SafeAreaViewContainer = styled.SafeAreaView`
-//   flex: 1;
-//   background-color: ${(props) => props.theme.PRIMARY_BACKGROUND_COLOR};
-//   padding-top: 42px;
-// `;
-
-// paddingTop was StatusBar.currentHeight

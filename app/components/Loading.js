@@ -3,14 +3,20 @@ import { StyleSheet, View, ActivityIndicator } from "react-native";
 
 // THEME
 import { ThemeProvider } from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 function Loading(props) {
   const theme = useSelector((state) => state.themeReducer.theme);
 
   return (
     <ThemeProvider theme={theme}>
-      <View style={[styles.container, styles.horizontal]}>
+      <View
+        style={[
+          styles.container,
+          styles.horizontal,
+          { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+        ]}
+      >
         <ActivityIndicator
           size="large"
           hidesWhenStopped

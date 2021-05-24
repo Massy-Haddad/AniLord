@@ -30,7 +30,6 @@ const height = Dimensions.get("window").height;
 const TOP_HEADER_HEIGHT = height * 0.25;
 
 function ProfileScreen({ navigation }) {
-
   // THEME
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
@@ -84,7 +83,7 @@ function ProfileScreen({ navigation }) {
           <Text
             style={{
               fontSize: 20,
-              fontFamily: 'Overpass_900Black',
+              fontFamily: "Overpass_900Black",
               color: "white" /* theme.PRIMARY_BUTTON_TEXT_COLOR */,
               alignSelf: "flex-end",
               marginVertical: 12,
@@ -112,8 +111,15 @@ function ProfileScreen({ navigation }) {
               marginRight: 12,
             }}
           >
-            <Text style={{ fontSize: 32, alignSelf: "center", fontFamily: 'Overpass_900Black' }}>
-              COMING SOON
+            <Text
+              style={{
+                fontSize: 32,
+                alignSelf: "center",
+                fontFamily: "Overpass_900Black",
+                color: theme.PRIMARY_BUTTON_TEXT_COLOR,
+              }}
+            >
+              COMING SOON..
             </Text>
           </ScrollView>
         </View>

@@ -20,12 +20,12 @@ const SPACING = 8;
 
 function Overview(props) {
   // GRAPHQL
-  const { loading, error, data } = useQuery(MEDIA_OVERVIEW, {
+  const { loading, error, data, refetch } = useQuery(MEDIA_OVERVIEW, {
     variables: { id: props.mediaId },
     suspend: false,
   });
 
-  useEffect(() => {}, [data]);
+  useEffect(() => {}, [loading, error, data, refetch]);
 
   const renderItem = ({ item }) => {
     return (

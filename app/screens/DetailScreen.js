@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
-  ScrollView,
   Image,
-  Dimensions,
-  ImageBackground,
   SafeAreaView,
   StatusBar,
   TouchableOpacity,
@@ -15,35 +12,22 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 // TRANSITIONS
-import * as Animatable from "react-native-animatable";
 import { SharedElement } from "react-navigation-shared-element";
 
 // THEME
 import { ThemeProvider } from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 // COMPONENTS
-import Details from "../components/Details";
 import Overview from "../components/Overview";
 import Characters from "../components/Characters";
 import Staff from "../components/Staff";
 import Stats from "../components/Stats";
-import Searchbar from "../components/SearchBar";
 
 // NAVIGATION
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import DetailScreenTab from "../navigation/DetailScreenTab";
 
 const SPACING = 8;
-const sections = [
-  "Overview",
-  "Characters",
-  "Staff",
-  "Reviews",
-  "Stats",
-  "Social",
-];
 
 const DetailScreen = ({ navigation, route }) => {
   const { item } = route.params;
@@ -99,25 +83,6 @@ const DetailScreen = ({ navigation, route }) => {
               {item.title.userPreferred}
             </Text>
           </SharedElement>
-          {/* <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {sections.map((section) => (
-              <TouchableOpacity style={styles.section}>
-                <Text
-                  style={[
-                    styles.sectionText,
-                    {
-                      color:
-                        section === "Overview"
-                          ? theme.SELECTED_ITEM_COLOR
-                          : theme.SECONDARY_TEXT_COLOR,
-                    },
-                  ]}
-                >
-                  {section}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView> */}
         </View>
 
         {/* COMPONENTS */}
@@ -126,8 +91,15 @@ const DetailScreen = ({ navigation, route }) => {
             activeTintColor: theme.PRIMARY_TEXT_COLOR,
             inactiveTintColor: theme.PRIMARY_BUTTON_TEXT_COLOR,
             indicatorStyle: { backgroundColor: theme.PRIMARY_TEXT_COLOR },
+            // scrollEnabled: true,
             style: {
               backgroundColor: theme.PRIMARY_BUTTON_COLOR,
+              fontSize: 25,
+            },
+            labelStyle: {
+              fontSize: 12,
+              margin: 0,
+              padding: 0,
             },
           }}
         >
@@ -153,12 +125,12 @@ const DetailScreen = ({ navigation, route }) => {
               <Staff theme={theme} mediaId={item.id} mediaType={item.type} />
             )}
           />
-          {/* <Tab.Screen
+          <Tab.Screen
             name="Stats"
             children={() => (
               <Stats theme={theme} mediaId={item.id} mediaType={item.type} />
             )}
-          /> */}
+          />
         </Tab.Navigator>
       </SafeAreaView>
     </ThemeProvider>
@@ -244,7 +216,7 @@ const styles = StyleSheet.create({
   // OTHERS
   close: {
     position: "absolute",
-    top: Platform.OS === "ios" ? SPACING * 3 : SPACING,
+    top: Platform.OS === "ios" ? SPACING * 5 : SPACING,
     right: SPACING * 2,
     zIndex: 2,
     textShadowColor: "black",
