@@ -24,6 +24,7 @@ import { lightTheme, darkTheme } from "../../Theme";
 // import SearchBar from "../components/SearchBar";
 import { useQuery, useLazyQuery } from "react-apollo";
 import { SEARCH_QUERY } from "../services/media";
+import Media from "../components/Media";
 
 const { width, height } = Dimensions.get("screen");
 const ITEM_WIDTH_2 = width / 2;
@@ -35,7 +36,7 @@ export default function SearchScreen({ navigation }) {
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
 
-  const [animeList, setAnimeList] = useState([]);
+  const [mediaList, setAnimeList] = useState([]);
   const [selectedValue, setSelectedValue] = useState("ANIME");
   const [numColumns, setNumColumns] = useState(3);
   const [searchInput, setSearchInput] = useState("demon slayer");
@@ -47,7 +48,7 @@ export default function SearchScreen({ navigation }) {
     if (searchData) {
       setAnimeList(searchData.Page.media);
     }
-  }, [animeList, searchData]);
+  }, [mediaList, searchData]);
 
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
@@ -214,14 +215,7 @@ export default function SearchScreen({ navigation }) {
             </Text>
           </Animatable.View>
         ) : (
-          <FlatList
-            data={formatData(animeList, numColumns)}
-            style={styles.container}
-            renderItem={renderItem}
-            numColumns={numColumns}
-            key={numColumns}
-          />
-          // <Text>COUCOU</Text>
+          <Media theme={theme} mediaList={mediaList} />
         )}
       </View>
     </ThemeProvider>
@@ -232,16 +226,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 10,
-  },
-  item: {
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    margin: 12,
-    // height: ITEM_HEIGHT * 0.9,
-    // width: ITEM_WIDTH,
-    borderRadius: 8,
   },
   itemInvisible: {
     backgroundColor: "transparent",
@@ -258,12 +242,11 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     fontSize: 16,
-    //color: "#2e1408",
-    paddingLeft: 32,
+    paddingLeft: 36,
   },
   searchInputIcon: {
     position: "absolute",
-    left: 8,
+    left: 12,
     top: 12,
   },
 });

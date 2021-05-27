@@ -242,7 +242,7 @@ export default function HomeScreen({ navigation }) {
             <Image
               style={{
                 borderRadius: 6,
-                width: 125,
+                width: 150,
                 height: undefined,
                 aspectRatio: 60 / 82,
                 marginHorizontal: 6,
