@@ -9,9 +9,9 @@ import {
   FlatList,
   TextInput,
 } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import * as Animatable from "react-native-animatable";
 import { Picker } from "@react-native-picker/picker";
-import { StatusBar } from "expo-status-bar";
 import { MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
 
 // THEME
@@ -20,16 +20,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { switchTheme } from "../redux/themeActions";
 import { lightTheme, darkTheme } from "../../Theme";
 
+// COMPONENTS
+import Media from "../components/MediaList";
+
 // GRAPHQL
 // import SearchBar from "../components/SearchBar";
 import { useQuery, useLazyQuery } from "react-apollo";
 import { SEARCH_QUERY } from "../services/media";
-import Media from "../components/Media";
 
 const { width, height } = Dimensions.get("screen");
-const ITEM_WIDTH_2 = width / 2;
-const ITEM_WIDTH_3 = width * 0.8;
-const ITEM_HEIGHT = ITEM_WIDTH_2 * 0.8;
 
 export default function SearchScreen({ navigation }) {
   // THEME
@@ -50,36 +49,6 @@ export default function SearchScreen({ navigation }) {
     }
   }, [mediaList, searchData]);
 
-  const formatData = (data, numColumns) => {
-    const numberOfFullRows = Math.floor(data.length / numColumns);
-
-    let numberOfElementsLastRow = data.length - numberOfFullRows * numColumns;
-    while (
-      numberOfElementsLastRow !== numColumns &&
-      numberOfElementsLastRow !== 0
-    ) {
-      data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
-      numberOfElementsLastRow++;
-    }
-
-    return data;
-  };
-
-  const renderItem = ({ item, index }) => {
-    if (item.empty === true) {
-      return <View style={[styles.item, styles.itemInvisible]} />;
-    }
-    return (
-      <Image
-        style={[
-          styles.item,
-          { height: numColumns == 2 ? ITEM_HEIGHT * 1.5 : ITEM_HEIGHT * 0.9 },
-        ]}
-        source={{ uri: item.coverImage.extraLarge }}
-      />
-    );
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <View
@@ -96,7 +65,7 @@ export default function SearchScreen({ navigation }) {
           color={theme.PRIMARY_BUTTON_TEXT_COLOR}
           style={{
             position: "absolute",
-            top: 50,
+            top: 35,
             right: 20,
             zIndex: 2,
             //backgroundColor: "lightgrey",
@@ -110,7 +79,7 @@ export default function SearchScreen({ navigation }) {
 
         {/* Header */}
         <View
-          style={{ marginTop: 42, marginBottom: 12, paddingHorizontal: 20 }}
+          style={{ marginTop: 24, marginBottom: 12, paddingHorizontal: 20 }}
         >
           <View style={{ flexDirection: "row" }}>
             <Text
@@ -129,7 +98,7 @@ export default function SearchScreen({ navigation }) {
               selectedValue={selectedValue}
               style={{
                 height: 50,
-                width: 160,
+                width: 200,
                 justifyContent: "center",
                 color: theme.PRIMARY_TEXT_COLOR,
               }}
@@ -215,7 +184,12 @@ export default function SearchScreen({ navigation }) {
             </Text>
           </Animatable.View>
         ) : (
-          <Media theme={theme} mediaList={mediaList} />
+          <Media
+            navigation={navigation}
+            theme={theme}
+            mediaList={mediaList}
+            mode="gallery"
+          />
         )}
       </View>
     </ThemeProvider>

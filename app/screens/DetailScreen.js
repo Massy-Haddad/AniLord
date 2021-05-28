@@ -158,9 +158,9 @@ const styles = StyleSheet.create({
   },
   coverImage: {
     borderRadius: 5,
-    width: 115,
+    width: 105,
     height: undefined,
-    aspectRatio: 460 / 650,
+    aspectRatio: 460 / 727,
   },
   headerButtonStatus: {
     borderRadius: 5,
@@ -231,12 +231,14 @@ DetailScreen.sharedElements = (route) => {
     {
       id: `item.${item.id}.image_url`,
       animation: "move",
-      resize: "clip",
+      resize: "auto",
+      align: "auto",
     },
     {
       id: `item.${item.id}.title`,
-      animation: "fade",
-      resize: "clip",
+      animation: "move",
+      resize: "auto",
+      align: "auto",
     },
   ];
 };

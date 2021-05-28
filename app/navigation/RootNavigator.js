@@ -65,7 +65,7 @@ function Home({ navigation, route }) {
     <Stack1.Navigator headerMode="none">
       <Stack1.Screen name={name} component={HomeScreen} />
       <Stack1.Screen
-        name="DetailScreen"
+        name="HomeDetailScreen"
         component={DetailScreen}
         options={() => options}
       />
@@ -73,9 +73,26 @@ function Home({ navigation, route }) {
   );
 }
 
-const Search = () => (
+/***** OLD WAY *****/
+// const Search = ({ navigation, route }) => (
+//   <Stack2.Navigator headerMode="none">
+//     <Stack2.Screen name={name} component={SearchScreen} />
+//     <Stack2.Screen
+//       name="SearchDetailScreen"
+//       component={DetailScreen}
+//       options={() => options}
+//     />
+//   </Stack2.Navigator>
+// );
+
+const Search = ({ navigation, route }) => (
   <Stack2.Navigator headerMode="none">
     <Stack2.Screen name={name} component={SearchScreen} />
+    <Stack2.Screen
+      name="SearchDetailScreen"
+      component={DetailScreen}
+      options={() => options}
+    />
   </Stack2.Navigator>
 );
 

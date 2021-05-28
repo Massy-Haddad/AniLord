@@ -199,7 +199,11 @@ function Overview(props) {
               <View
                 style={[
                   styles.genre,
-                  { backgroundColor: data.Media.coverImage.color },
+                  {
+                    backgroundColor: data.Media.coverImage.color
+                      ? data.Media.coverImage.color
+                      : props.theme.PRIMARY_BUTTON_COLOR,
+                  },
                 ]}
               >
                 <Text style={styles.genreText}>{genre}</Text>

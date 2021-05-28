@@ -236,7 +236,7 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity
           activeOpacity={0.8}
           style={{ marginBottom: 14 }}
-          onPress={() => navigation.navigate("DetailScreen", { item })}
+          onPress={() => navigation.navigate("HomeDetailScreen", { item })}
         >
           <SharedElement id={`item.${item.id}.image_url`}>
             <Image
