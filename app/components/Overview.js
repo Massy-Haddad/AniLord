@@ -238,7 +238,7 @@ function Overview(props) {
               },
             ]}
           >
-            {data.Media.description.replace(regex, "")}
+            {data.Media.description?.replace(regex, "")}
           </Text>
         </View>
 

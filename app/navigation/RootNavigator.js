@@ -1,7 +1,7 @@
 import * as React from "react";
 
 // UI
-import { Text, View, StatusBar } from "react-native";
+import { Text, View, StatusBar, Platform } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 // NAVIGATION
@@ -85,16 +85,23 @@ function Home({ navigation, route }) {
 //   </Stack2.Navigator>
 // );
 
-const Search = ({ navigation, route }) => (
-  <Stack2.Navigator headerMode="none">
-    <Stack2.Screen name={name} component={SearchScreen} />
-    <Stack2.Screen
-      name="SearchDetailScreen"
-      component={DetailScreen}
-      options={() => options}
-    />
-  </Stack2.Navigator>
-);
+function Search({ navigation, route }) {
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
+  } else {
+    navigation.setOptions({ tabBarVisible: true });
+  }
+  return (
+    <Stack2.Navigator headerMode="none">
+      <Stack2.Screen name={name} component={SearchScreen} />
+      <Stack2.Screen
+        name="SearchDetailScreen"
+        component={DetailScreen}
+        options={() => options}
+      />
+    </Stack2.Navigator>
+  );
+}
 
 const Profile = () => (
   <Stack2.Navigator headerMode="none">
@@ -111,6 +118,7 @@ export default function RootNavigator() {
     <ThemeProvider theme={theme}>
       {/* STATUS BAR */}
       <StatusBar
+        translucent
         barStyle={theme.STATUS_BAR_STYLE}
         backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
       />
@@ -127,7 +135,7 @@ export default function RootNavigator() {
               elevation: 0,
               backgroundColor: theme.PRIMARY_BUTTON_COLOR,
               borderTopColor: "transparent",
-              height: 90,
+              height: Platform.OS === "ios" ? 110 : 90,
               borderTopLeftRadius: 40,
               borderTopRightRadius: 40,
             },

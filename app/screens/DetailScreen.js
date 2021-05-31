@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 
 // TRANSITIONS
 import { SharedElement } from "react-navigation-shared-element";
@@ -80,6 +80,20 @@ const DetailScreen = ({ navigation, route }) => {
             <Text
               style={[styles.headerTitle, { color: theme.PRIMARY_TEXT_COLOR }]}
             >
+              {item.coverImage.color ? (
+                <FontAwesome5
+                  name="circle"
+                  size={18}
+                  solid={true}
+                  color={
+                    item.coverImage.color
+                      ? item.coverImage.color
+                      : props.theme.PRIMARY_TEXT_COLOR
+                  }
+                  style={{ margin: 10 }}
+                />
+              ) : null}
+              {item.coverImage.color ? " " : null}
               {item.title.userPreferred}
             </Text>
           </SharedElement>
@@ -231,14 +245,12 @@ DetailScreen.sharedElements = (route) => {
     {
       id: `item.${item.id}.image_url`,
       animation: "move",
-      resize: "auto",
-      align: "auto",
+      resize: "clip",
     },
     {
       id: `item.${item.id}.title`,
-      animation: "move",
-      resize: "auto",
-      align: "auto",
+      animation: "resize",
+      resize: "clip",
     },
   ];
 };

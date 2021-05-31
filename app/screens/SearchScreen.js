@@ -8,6 +8,7 @@ import {
   Dimensions,
   FlatList,
   TextInput,
+  SafeAreaView,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as Animatable from "react-native-animatable";
@@ -21,12 +22,13 @@ import { switchTheme } from "../redux/themeActions";
 import { lightTheme, darkTheme } from "../../Theme";
 
 // COMPONENTS
-import Media from "../components/MediaList";
+import MediaList from "../components/MediaList";
 
 // GRAPHQL
 // import SearchBar from "../components/SearchBar";
 import { useQuery, useLazyQuery } from "react-apollo";
 import { SEARCH_QUERY } from "../services/media";
+import Loading from "../components/Loading";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -35,10 +37,11 @@ export default function SearchScreen({ navigation }) {
   const theme = useSelector((state) => state.themeReducer.theme);
   const dispatch = useDispatch();
 
+  const [selectedValue, setSelectedValue] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [mediaList, setAnimeList] = useState([]);
-  const [selectedValue, setSelectedValue] = useState("ANIME");
-  const [numColumns, setNumColumns] = useState(3);
-  const [searchInput, setSearchInput] = useState("demon slayer");
+
+  const [isGallery, setIsGallery] = useState(true);
 
   // GRAPHQL
   const [getSearch, { data: searchData, loading }] = useLazyQuery(SEARCH_QUERY);
@@ -51,32 +54,13 @@ export default function SearchScreen({ navigation }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <View
+      <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-          paddingBottom: 100,
+          paddingBottom: 120,
         }}
       >
-        {/* LIST SIZE */}
-        <MaterialCommunityIcons
-          name={numColumns == 2 ? "view-list" : "crop-square"}
-          size={28}
-          color={theme.PRIMARY_BUTTON_TEXT_COLOR}
-          style={{
-            position: "absolute",
-            top: 35,
-            right: 20,
-            zIndex: 2,
-            //backgroundColor: "lightgrey",
-            //borderRadius: 50,
-            //padding: 3,
-          }}
-          onPress={() => {
-            numColumns == 2 ? setNumColumns(3) : setNumColumns(2);
-          }}
-        />
-
         {/* Header */}
         <View
           style={{ marginTop: 24, marginBottom: 12, paddingHorizontal: 20 }}
@@ -155,43 +139,15 @@ export default function SearchScreen({ navigation }) {
         </View>
 
         {loading ? (
-          <Animatable.View
-            animation="slideInDown"
-            iterationCount="infinite"
-            direction="alternate"
-            style={{ alignSelf: "center", paddingTop: height * 0.2 }}
-          >
-            <MaterialCommunityIcons
-              name="panda"
-              size={80}
-              color={theme.PRIMARY_BUTTON_TEXT_COLOR}
-              style={
-                {
-                  //backgroundColor: "lightgrey",
-                  //borderRadius: 50,
-                  //padding: 3,
-                }
-              }
-            />
-            <Text
-              style={{
-                textAlign: "center",
-                fontWeight: "bold",
-                color: theme.PRIMARY_BUTTON_TEXT_COLOR,
-              }}
-            >
-              L O A D I N G
-            </Text>
-          </Animatable.View>
+          <Loading theme={theme} />
         ) : (
-          <Media
+          <MediaList
             navigation={navigation}
             theme={theme}
             mediaList={mediaList}
-            mode="gallery"
           />
         )}
-      </View>
+      </SafeAreaView>
     </ThemeProvider>
   );
 }
