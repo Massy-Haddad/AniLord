@@ -20,7 +20,7 @@ const SPACING = 8;
 
 function Media(props, navigation) {
   const [numColumns, setNumColumns] = useState(1);
-  const [mode, setMode] = useState("gallery");
+  const [mode, setMode] = useState("detailed");
 
   useEffect(() => {
     console.log(mode);
@@ -242,26 +242,27 @@ function Media(props, navigation) {
               size={24}
               color={props.theme.PRIMARY_BUTTON_TEXT_COLOR}
             />
-            <TouchableOpacity>
-              <View style={styles.searchRemove}>
-                <Text
-                  onPress={() => {}}
-                  adjustsFontSizeToFit
-                  numberOfLines={1}
-                  style={{
-                    fontSize: 13,
-                    color: "white",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Change moi soon?{" "}
-                  <FontAwesome5
-                    name="times-circle"
-                    color={props.theme.PRIMARY_TEXT_COLOR}
-                  />
-                </Text>
-              </View>
-            </TouchableOpacity>
+            {props.search ? (
+              <TouchableOpacity onPress={() => {}}>
+                <View style={styles.searchRemove}>
+                  <Text
+                    adjustsFontSizeToFit
+                    numberOfLines={1}
+                    style={{
+                      fontSize: 13,
+                      color: "white",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {props.search + " "}
+                    <FontAwesome5
+                      name="times-circle"
+                      color={props.theme.PRIMARY_TEXT_COLOR}
+                    />
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ) : null}
           </View>
           <View style={styles.mode}>
             <TouchableOpacity>
@@ -297,9 +298,9 @@ function Media(props, navigation) {
             ? renderItemDetailed
             : null
         }
+        keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         key={numColumns}
-        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
@@ -322,7 +323,7 @@ const styles = StyleSheet.create({
   },
   search: {
     width: "80%",
-    maxWidth: 250,
+    maxWidth: 230,
     flexDirection: "row",
     alignItems: "center",
   },
@@ -340,9 +341,9 @@ const gallery = StyleSheet.create({
   media: {
     flex: 1,
     margin: SPACING,
-    borderRadius: 8,
   },
   mediaCover: {
+    borderRadius: 6,
     alignSelf: "center",
     height: undefined,
     aspectRatio: 110 / 158,
@@ -374,13 +375,12 @@ const detailed = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-
     elevation: 5,
   },
 
   // LEFT SIDE CARD
   mediaCard: {
-    width: "45%",
+    width: "46%",
   },
   mediaCover: {
     borderTopLeftRadius: 8,

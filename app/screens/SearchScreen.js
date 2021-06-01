@@ -62,9 +62,7 @@ export default function SearchScreen({ navigation }) {
         }}
       >
         {/* Header */}
-        <View
-          style={{ marginTop: 24, marginBottom: 12, paddingHorizontal: 20 }}
-        >
+        <View style={{ marginTop: 32, marginBottom: 8, paddingHorizontal: 8 }}>
           <View style={{ flexDirection: "row" }}>
             <Text
               style={{
@@ -144,6 +142,7 @@ export default function SearchScreen({ navigation }) {
           <MediaList
             navigation={navigation}
             theme={theme}
+            search={searchInput}
             mediaList={mediaList}
           />
         )}

@@ -123,7 +123,7 @@ export default function RootNavigator() {
         backgroundColor={theme.PRIMARY_BACKGROUND_COLOR}
       />
 
-      <NavigationContainer>
+      <NavigationContainer focused="Search">
         <BottomTab.Navigator
           tabBarOptions={{
             showLabel: false,
@@ -151,8 +151,12 @@ export default function RootNavigator() {
                 >
                   <FontAwesome5
                     name="home"
-                    size={24}
-                    color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+                    size={focused ? 30 : 24}
+                    color={
+                      focused
+                        ? theme.PRIMARY_TEXT_COLOR
+                        : theme.SECONDARY_TEXT_COLOR
+                    }
                   />
                 </View>
               ),
@@ -164,11 +168,15 @@ export default function RootNavigator() {
             component={Search}
             options={{
               title: "SEARCH",
-              tabBarIcon: () => (
+              tabBarIcon: ({ focused }) => (
                 <FontAwesome5
                   name="search"
-                  size={20}
-                  color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+                  size={focused ? 26 : 20}
+                  color={
+                    focused
+                      ? theme.PRIMARY_TEXT_COLOR
+                      : theme.SECONDARY_TEXT_COLOR
+                  }
                 />
               ),
             }}
@@ -179,11 +187,15 @@ export default function RootNavigator() {
             component={Profile}
             options={{
               title: "PROFILE",
-              tabBarIcon: () => (
+              tabBarIcon: ({ focused }) => (
                 <FontAwesome5
                   name="user-alt"
-                  size={24}
-                  color={theme.PRIMARY_BUTTON_TEXT_COLOR}
+                  size={focused ? 30 : 24}
+                  color={
+                    focused
+                      ? theme.PRIMARY_TEXT_COLOR
+                      : theme.SECONDARY_TEXT_COLOR
+                  }
                 />
               ),
             }}

@@ -13,6 +13,7 @@ import { useQuery } from "react-apollo";
 import { MEDIA_OVERVIEW } from "../services/media";
 import Loading from "./Loading";
 import Details from "./Details";
+import Genres from "./Genres";
 
 // VARIABLES
 const regex = /(<([^>]+)>)/gi;
@@ -194,22 +195,7 @@ function Overview(props) {
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* GENRES */}
         <View style={styles.genres}>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {data.Media.genres.map((genre) => (
-              <View
-                style={[
-                  styles.genre,
-                  {
-                    backgroundColor: data.Media.coverImage.color
-                      ? data.Media.coverImage.color
-                      : props.theme.PRIMARY_BUTTON_COLOR,
-                  },
-                ]}
-              >
-                <Text style={styles.genreText}>{genre}</Text>
-              </View>
-            ))}
-          </ScrollView>
+          <Genres theme={props.theme} media={data.Media} />
         </View>
 
         {/* DETAILS */}
@@ -332,22 +318,7 @@ const styles = StyleSheet.create({
   },
 
   // GENRES
-  genres: {
-    marginBottom: SPACING * 2,
-    alignItems: "center",
-  },
-  genre: {
-    height: SPACING * 3,
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: SPACING / 2,
-    borderRadius: 50,
-  },
-  genreText: {
-    fontWeight: "bold",
-    color: "#ffffff",
-    padding: 6,
-  },
+  genres: { marginBottom: SPACING * 2 },
 
   // DETAILS
   details: {

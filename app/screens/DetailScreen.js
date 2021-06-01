@@ -229,12 +229,12 @@ const styles = StyleSheet.create({
 
   // OTHERS
   close: {
-    position: "absolute",
-    top: Platform.OS === "ios" ? SPACING * 5 : SPACING,
-    right: SPACING * 2,
     zIndex: 2,
-    textShadowColor: "black",
+    position: "absolute",
+    right: SPACING * 2,
+    top: Platform.OS === "ios" ? SPACING * 5 : SPACING * 4,
     textShadowRadius: 8,
+    textShadowColor: "black",
     textShadowOffset: { width: -1, height: 1 },
   },
 });
@@ -249,7 +249,7 @@ DetailScreen.sharedElements = (route) => {
     },
     {
       id: `item.${item.id}.title`,
-      animation: "resize",
+      animation: "fade",
       resize: "clip",
     },
   ];
