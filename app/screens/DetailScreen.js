@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 105,
     height: undefined,
-    aspectRatio: 460 / 727,
+    aspectRatio: 175 / 265,
   },
   headerButtonStatus: {
     borderRadius: 5,

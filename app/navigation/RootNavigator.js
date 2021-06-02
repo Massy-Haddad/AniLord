@@ -24,7 +24,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 // THEME
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { switchTheme } from "../redux/themeActions";
+import { switchTheme } from "../redux/actions/themeActions";
 import { lightTheme, darkTheme } from "../../Theme";
 
 const options = {

@@ -3,34 +3,28 @@ import {
   StyleSheet,
   Text,
   View,
-  TouchableOpacity,
-  Image,
   Dimensions,
-  FlatList,
   TextInput,
   SafeAreaView,
 } from "react-native";
-import { StatusBar } from "expo-status-bar";
-import * as Animatable from "react-native-animatable";
 import { Picker } from "@react-native-picker/picker";
-import { MaterialCommunityIcons, SimpleLineIcons } from "@expo/vector-icons";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 // THEME
-import styled, { ThemeProvider } from "styled-components";
+import { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { switchTheme } from "../redux/themeActions";
-import { lightTheme, darkTheme } from "../../Theme";
 
 // COMPONENTS
 import MediaList from "../components/MediaList";
 
 // GRAPHQL
 // import SearchBar from "../components/SearchBar";
-import { useQuery, useLazyQuery } from "react-apollo";
+import { useLazyQuery } from "react-apollo";
 import { SEARCH_QUERY } from "../services/media";
 import Loading from "../components/Loading";
 
 const { width, height } = Dimensions.get("screen");
+const SPACING = 8;
 
 export default function SearchScreen({ navigation }) {
   // THEME
@@ -40,8 +34,6 @@ export default function SearchScreen({ navigation }) {
   const [selectedValue, setSelectedValue] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [mediaList, setAnimeList] = useState([]);
-
-  const [isGallery, setIsGallery] = useState(true);
 
   // GRAPHQL
   const [getSearch, { data: searchData, loading }] = useLazyQuery(SEARCH_QUERY);
@@ -55,11 +47,10 @@ export default function SearchScreen({ navigation }) {
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaView
-        style={{
-          flex: 1,
-          backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
-          paddingBottom: 120,
-        }}
+        style={[
+          styles.container,
+          { backgroundColor: theme.PRIMARY_BACKGROUND_COLOR },
+        ]}
       >
         {/* Header */}
         <View style={{ marginTop: 32, marginBottom: 8, paddingHorizontal: 8 }}>
@@ -69,8 +60,8 @@ export default function SearchScreen({ navigation }) {
                 color: theme.PRIMARY_TEXT_COLOR,
                 fontSize: 32,
                 fontWeight: "600",
-                marginBottom: 18,
-                marginRight: 5,
+                marginBottom: SPACING * 2,
+                marginRight: SPACING,
               }}
             >
               Search
@@ -152,13 +143,12 @@ export default function SearchScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  // MAIN VIEW
   container: {
     flex: 1,
-    margin: 10,
+    paddingBottom: 300,
   },
-  itemInvisible: {
-    backgroundColor: "transparent",
-  },
+
   searchContainer: {
     display: "flex",
     flexDirection: "row",

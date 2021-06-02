@@ -1,6 +1,7 @@
 import "react-native-gesture-handler";
 import React from "react";
 import RootNavigator from "./app/navigation/RootNavigator";
+import { LogBox } from "react-native";
 
 // FONT
 import AppLoading from "expo-app-loading";
@@ -14,7 +15,7 @@ import {
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware, combineReducers } from "redux";
 import thunk from "redux-thunk";
-import themeReducer from "./app/redux/themeReducer";
+import themeReducer from "./app/redux/reducers/themeReducer";
 
 const store = createStore(
   combineReducers({ themeReducer }),
@@ -39,6 +40,7 @@ const apolloClient = new ApolloClient({
 });
 
 // disabling the yellow warning box (temporarily)
+LogBox.ignoreLogs(["Warning: ..."]); //Hide warnings
 console.disableYellowBox = true;
 
 export default function App() {

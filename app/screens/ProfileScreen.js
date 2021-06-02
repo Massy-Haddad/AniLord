@@ -15,12 +15,13 @@ import {
 // THEME
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { switchTheme } from "../redux/themeActions";
+import { switchTheme } from "../redux/reducers/themeReducer";
 import { lightTheme, darkTheme } from "../../Theme";
 
 // GRAPHQL
 import { useQuery } from "react-apollo";
 import { PROFILE_QUERY } from "../services/media";
+import Loading from "../components/Loading";
 
 // VARIABLES
 const windowHeight = Dimensions.get("window").height;
@@ -39,13 +40,7 @@ function ProfileScreen({ navigation }) {
     variables: { userName: "Waghzen", type: "MANGA" },
   });
 
-  if (loading || error) return null;
-
-  {
-    /* 
-  {console.log(data.MediaListCollection.lists[0].entries[0].id)}
-  {console.log(data.MediaListCollection.user.bannerImage)} */
-  }
+  if (loading || error) return <Loading theme={theme} />;
 
   // MAIN
   return (

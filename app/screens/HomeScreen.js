@@ -18,7 +18,7 @@ import * as Animatable from "react-native-animatable";
 
 import styled, { ThemeProvider } from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
-import { switchTheme } from "../redux/themeActions";
+import { switchTheme } from "../redux/actions/themeActions";
 import { lightTheme, darkTheme } from "../../Theme";
 
 const { width } = Dimensions.get("screen");

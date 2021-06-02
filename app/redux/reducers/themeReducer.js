@@ -1,5 +1,5 @@
-import { darkTheme, lightTheme } from "../../Theme";
-import { SWITCH_THEME } from "./themeActions";
+import { darkTheme, lightTheme } from "../../../Theme";
+import { SWITCH_THEME } from "../actions/themeActions";
 
 const initialState = {
   theme: darkTheme,

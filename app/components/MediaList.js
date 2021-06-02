@@ -107,7 +107,7 @@ function Media(props, navigation) {
         style={[
           detailed.media,
           {
-            width: (width / numColumns) * 0.9,
+            width: (width / numColumns) * 0.95,
             backgroundColor: props.theme.PRIMARY_BUTTON_COLOR,
           },
         ]}
