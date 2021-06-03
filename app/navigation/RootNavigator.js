@@ -6,7 +6,10 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 // NAVIGATION
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  NavigationContainer,
+} from "@react-navigation/native";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import {
   Screen,
@@ -42,21 +45,18 @@ const name = "BottomTabs";
 const BottomTab = createBottomTabNavigator();
 const Stack1 = createSharedElementStackNavigator({
   name,
-  debug: true,
 });
 
 const Stack2 = createSharedElementStackNavigator({
   name,
-  debug: true,
 });
 
 const Stack3 = createSharedElementStackNavigator({
   name,
-  debug: true,
 });
 
 function Home({ navigation, route }) {
-  if (route.state && route.state.index > 0) {
+  if (getFocusedRouteNameFromRoute(route) === "HomeDetailScreen") {
     navigation.setOptions({ tabBarVisible: false });
   } else {
     navigation.setOptions({ tabBarVisible: true });
@@ -73,20 +73,8 @@ function Home({ navigation, route }) {
   );
 }
 
-/***** OLD WAY *****/
-// const Search = ({ navigation, route }) => (
-//   <Stack2.Navigator headerMode="none">
-//     <Stack2.Screen name={name} component={SearchScreen} />
-//     <Stack2.Screen
-//       name="SearchDetailScreen"
-//       component={DetailScreen}
-//       options={() => options}
-//     />
-//   </Stack2.Navigator>
-// );
-
 function Search({ navigation, route }) {
-  if (route.state && route.state.index > 0) {
+  if (getFocusedRouteNameFromRoute(route) === "SearchDetailScreen") {
     navigation.setOptions({ tabBarVisible: false });
   } else {
     navigation.setOptions({ tabBarVisible: true });
@@ -104,9 +92,9 @@ function Search({ navigation, route }) {
 }
 
 const Profile = () => (
-  <Stack2.Navigator headerMode="none">
-    <Stack2.Screen name={name} component={ProfileScreen} />
-  </Stack2.Navigator>
+  <Stack3.Navigator headerMode="none">
+    <Stack3.Screen name={name} component={ProfileScreen} />
+  </Stack3.Navigator>
 );
 
 export default function RootNavigator() {

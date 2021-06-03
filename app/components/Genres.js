@@ -12,6 +12,7 @@ function Genres(props) {
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {props.media.genres.map((genre) => (
           <View
+            key={genre}
             style={[
               styles.genre,
               {

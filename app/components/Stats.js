@@ -87,6 +87,7 @@ function Stats(props) {
           {data.Media.distribution.status.map((status) =>
             status.status !== "DROPPED" ? (
               <View
+                key={status.status}
                 style={[
                   styles.statusDistribution,
                   {

@@ -3,7 +3,7 @@ import gql from "graphql-tag";
 // ALL REQUESTS CONCERNING MEDIAS
 
 export const PROFILE_QUERY = gql`
-  query($userName: String, $type: MediaType) {
+  query ($userName: String, $type: MediaType) {
     MediaListCollection(userName: $userName, type: $type) {
       lists {
         name
@@ -98,7 +98,7 @@ export const PROFILE_QUERY = gql`
 `;
 
 export const SEARCH_QUERY = gql`
-  query(
+  query (
     $page: Int = 1
     $id: Int
     $type: MediaType
@@ -588,7 +588,7 @@ export const MEDIA_STAFF = gql`
 `;
 
 export const MEDIA_STATS = gql`
-  query($id: Int) {
+  query ($id: Int) {
     Media(id: $id) {
       id
       rankings {

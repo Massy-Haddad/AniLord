@@ -16,12 +16,14 @@ import { useSelector, useDispatch } from "react-redux";
 
 // COMPONENTS
 import MediaList from "../components/MediaList";
+import CharacterList from "../components/CharacterList";
 
 // GRAPHQL
 // import SearchBar from "../components/SearchBar";
+import Loading from "../components/Loading";
 import { useLazyQuery } from "react-apollo";
 import { SEARCH_QUERY } from "../services/media";
-import Loading from "../components/Loading";
+import { CHARACTERS_SEARCH_QUERY } from "../services/character";
 
 const { width, height } = Dimensions.get("screen");
 const SPACING = 8;
@@ -34,15 +36,22 @@ export default function SearchScreen({ navigation }) {
   const [selectedValue, setSelectedValue] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [mediaList, setAnimeList] = useState([]);
+  const [characterList, setCharacterList] = useState([]);
 
   // GRAPHQL
-  const [getSearch, { data: searchData, loading }] = useLazyQuery(SEARCH_QUERY);
+  const [getSearchMedia, { data: searchData, loading: mediasLoading }] =
+    useLazyQuery(SEARCH_QUERY);
+
+  const [
+    getSearchCharacter,
+    { data: searchCharacterData, loading: charactersLoading },
+  ] = useLazyQuery(CHARACTERS_SEARCH_QUERY);
 
   useEffect(() => {
-    if (searchData) {
-      setAnimeList(searchData.Page.media);
-    }
-  }, [mediaList, searchData]);
+    if (searchData && !charactersLoading) setAnimeList(searchData.Page.media);
+    if (searchCharacterData && !mediasLoading)
+      setCharacterList(searchCharacterData.Page.characters);
+  }, [mediaList, searchData, searchCharacterData]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -53,31 +62,31 @@ export default function SearchScreen({ navigation }) {
         ]}
       >
         {/* Header */}
-        <View style={{ marginTop: 32, marginBottom: 8, paddingHorizontal: 8 }}>
+        <View style={styles.header}>
           <View style={{ flexDirection: "row" }}>
             <Text
-              style={{
-                color: theme.PRIMARY_TEXT_COLOR,
-                fontSize: 32,
-                fontWeight: "600",
-                marginBottom: SPACING * 2,
-                marginRight: SPACING,
-              }}
+              style={[
+                styles.headerText,
+                {
+                  color: theme.PRIMARY_TEXT_COLOR,
+                },
+              ]}
             >
               Search
             </Text>
 
             <Picker
               selectedValue={selectedValue}
-              style={{
-                height: 50,
-                width: 200,
-                justifyContent: "center",
-                color: theme.PRIMARY_TEXT_COLOR,
+              style={[
+                styles.picker,
+                {
+                  color: theme.PRIMARY_TEXT_COLOR,
+                },
+              ]}
+              onValueChange={(itemValue, itemIndex) => {
+                setSelectedValue(itemValue);
+                setSearchInput("");
               }}
-              onValueChange={(itemValue, itemIndex) =>
-                setSelectedValue(itemValue)
-              }
               itemStyle={{
                 color: theme.PRIMARY_BUTTON_TEXT_COLOR,
                 backgroundColor: theme.PRIMARY_BACKGROUND_COLOR,
@@ -107,19 +116,19 @@ export default function SearchScreen({ navigation }) {
               style={styles.searchInputIcon}
             />
             <TextInput
-              style={[
-                styles.searchInput,
-                { color: theme.PRIMARY_BUTTON_TEXT_COLOR },
-              ]}
+              style={[styles.searchInput, { color: theme.PRIMARY_TEXT_COLOR }]}
               placeholder={"Enter " + selectedValue.toLowerCase() + " name"}
-              // placeholder={ searchInput === '' ? "Enter " + selectedValue.toLowerCase() + " name" : searchInput }
               placeholderTextColor={theme.PRIMARY_BUTTON_TEXT_COLOR}
               onChangeText={(text) => setSearchInput(text)}
               returnKeyType="search"
               onSubmitEditing={() =>
-                selectedValue === ""
-                  ? getSearch({ variables: { search: searchInput } })
-                  : getSearch({
+                selectedValue === "CHARACTER"
+                  ? getSearchCharacter({
+                      variables: { pageNumber: 1, search: searchInput },
+                    })
+                  : selectedValue === ""
+                  ? getSearchMedia({ variables: { search: searchInput } })
+                  : getSearchMedia({
                       variables: { search: searchInput, type: selectedValue },
                     })
               }
@@ -127,16 +136,39 @@ export default function SearchScreen({ navigation }) {
           </View>
         </View>
 
-        {loading ? (
-          <Loading theme={theme} />
-        ) : (
-          <MediaList
-            navigation={navigation}
-            theme={theme}
-            search={searchInput}
-            mediaList={mediaList}
-          />
-        )}
+        {(() => {
+          switch (selectedValue) {
+            case "ANIME":
+            case "MANGA":
+            case "":
+              return mediasLoading ? (
+                <Loading theme={theme} />
+              ) : (
+                <MediaList
+                  navigation={navigation}
+                  theme={theme}
+                  search={searchInput}
+                  mediaList={mediaList}
+                />
+              );
+            case "CHARACTER":
+              return charactersLoading ? (
+                <Loading theme={theme} />
+              ) : (
+                <CharacterList
+                  navigation={navigation}
+                  theme={theme}
+                  characterList={characterList}
+                />
+              );
+            case "STUDIO":
+              return <Text>STUDIO</Text>;
+            case "STAFF":
+              return <Text>STAFF</Text>;
+            default:
+              return null;
+          }
+        })()}
       </SafeAreaView>
     </ThemeProvider>
   );
@@ -147,6 +179,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingBottom: 300,
+  },
+
+  header: {
+    marginTop: SPACING * 4,
+    marginBottom: SPACING,
+    paddingHorizontal: SPACING + 2,
+  },
+  headerText: {
+    fontSize: 32,
+    fontWeight: "600",
+    marginBottom: SPACING * 2,
+    marginRight: SPACING,
+  },
+
+  picker: {
+    height: 50,
+    width: 200,
+    justifyContent: "center",
   },
 
   searchContainer: {

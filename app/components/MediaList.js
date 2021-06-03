@@ -7,27 +7,26 @@ import {
   Image,
   Dimensions,
   FlatList,
-  ImageBackground,
   ScrollView,
 } from "react-native";
 import { SharedElement } from "react-navigation-shared-element";
 import { FontAwesome5 } from "@expo/vector-icons";
+import * as Animatable from "react-native-animatable";
+
+// COMPONENTS
 import Genres from "./Genres";
 
-const { width, height } = Dimensions.get("screen");
-const regex = /(<([^>]+)>)/gi;
 const SPACING = 8;
+const regex = /(<([^>]+)>)/gi;
+const { width, height } = Dimensions.get("screen");
 
-function Media(props, navigation) {
+function MediaList(props) {
   const [numColumns, setNumColumns] = useState(1);
-  const [mode, setMode] = useState("detailed");
+  const [mode, setMode] = useState("gallery");
 
-  useEffect(() => {
-    console.log(mode);
-  }, [props.mediaList, numColumns, mode]);
+  useEffect(() => {}, [numColumns, mode]);
 
-  // console.log(props.mediaList[0]);
-
+  // Calculate the number of full rows and set invisible items so the last ones aren't invisible
   const formatData = (data, numColumns) => {
     const numberOfFullRows = Math.floor(data.length / numColumns);
 
@@ -51,19 +50,29 @@ function Media(props, navigation) {
       return <View style={[gallery.media, gallery.mediaInvisible]} />;
     }
     return (
-      <TouchableOpacity
-        onPress={() =>
-          props.navigation.navigate("SearchDetailScreen", { item })
-        }
-        activeOpacity={0.5}
+      <Animatable.View
+        animation="zoomInUp"
+        duration={500}
+        delay={index * 50}
         style={gallery.media}
       >
-        <SharedElement id={`item.${item.id}.image_url`}>
-          <Image
-            style={[gallery.mediaCover, { width: (width * 0.88) / numColumns }]}
-            source={{ uri: item.coverImage.extraLarge }}
-          />
-        </SharedElement>
+        <TouchableOpacity
+          onPress={() =>
+            props.navigation.navigate("SearchDetailScreen", { item })
+          }
+          activeOpacity={0.5}
+        >
+          <SharedElement id={`item.${item.id}.image_url`}>
+            <Image
+              style={[
+                gallery.mediaCover,
+                { width: (width * 0.88) / numColumns },
+              ]}
+              source={{ uri: item.coverImage.extraLarge }}
+              resizeMode="cover"
+            />
+          </SharedElement>
+        </TouchableOpacity>
         <SharedElement id={`item.${item.id}.title`}>
           <Text
             numberOfLines={2}
@@ -91,7 +100,7 @@ function Media(props, navigation) {
             {item.title.userPreferred}
           </Text>
         </SharedElement>
-      </TouchableOpacity>
+      </Animatable.View>
     );
   };
 
@@ -103,7 +112,11 @@ function Media(props, navigation) {
       return <View style={[detailed.media, detailed.mediaInvisible]} />;
     }
     return (
-      <View
+      <Animatable.View
+        animation="zoomInUp"
+        duration={500}
+        delay={index * 100}
+        style={gallery.media}
         style={[
           detailed.media,
           {
@@ -123,6 +136,7 @@ function Media(props, navigation) {
             <Image
               style={detailed.mediaCover}
               source={{ uri: item.coverImage?.extraLarge }}
+              resizeMode="cover"
             />
           </SharedElement>
           {/* OVERLAY */}
@@ -227,7 +241,7 @@ function Media(props, navigation) {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </Animatable.View>
     );
   };
 
@@ -241,27 +255,47 @@ function Media(props, navigation) {
               name="tags"
               size={24}
               color={props.theme.PRIMARY_BUTTON_TEXT_COLOR}
+              style={{ marginRight: SPACING }}
             />
             {props.search ? (
-              <TouchableOpacity onPress={() => {}}>
-                <View style={styles.searchRemove}>
-                  <Text
-                    adjustsFontSizeToFit
-                    numberOfLines={1}
-                    style={{
-                      fontSize: 13,
-                      color: "white",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {props.search + " "}
-                    <FontAwesome5
-                      name="times-circle"
-                      color={props.theme.PRIMARY_TEXT_COLOR}
-                    />
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <ScrollView horizontal>
+                <TouchableOpacity onPress={() => {}}>
+                  <View style={styles.tags}>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        fontSize: 13,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {props.search + " "}
+                      <FontAwesome5
+                        name="times-circle"
+                        color={props.theme.PRIMARY_TEXT_COLOR}
+                      />
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <View style={styles.tags}>
+                    <Text
+                      numberOfLines={1}
+                      style={{
+                        fontSize: 13,
+                        color: "white",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      other{" "}
+                      <FontAwesome5
+                        name="times-circle"
+                        color={props.theme.PRIMARY_TEXT_COLOR}
+                      />
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </ScrollView>
             ) : null}
           </View>
           <View style={styles.mode}>
@@ -287,10 +321,10 @@ function Media(props, navigation) {
         </View>
       ) : null}
 
-      {/* MEDIA LIST */}
+      {/* MEDIAS LIST */}
       <FlatList
         showsVerticalScrollIndicator={false}
-        data={formatData(props.mediaList, numColumns)}
+        data={formatData(props?.mediaList, numColumns)}
         renderItem={
           mode === "gallery"
             ? renderItemGallery
@@ -298,9 +332,9 @@ function Media(props, navigation) {
             ? renderItemDetailed
             : null
         }
-        keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
         key={numColumns}
+        keyExtractor={(item, index) => index.toString()}
       />
     </View>
   );
@@ -314,7 +348,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: SPACING * 3,
+    paddingHorizontal: SPACING * 2,
   },
   mode: {
     width: "18%",
@@ -323,11 +357,11 @@ const styles = StyleSheet.create({
   },
   search: {
     width: "80%",
-    maxWidth: 230,
+    maxWidth: 270,
     flexDirection: "row",
     alignItems: "center",
   },
-  searchRemove: {
+  tags: {
     height: 25,
     borderRadius: 12,
     paddingHorizontal: SPACING,
@@ -380,7 +414,7 @@ const detailed = StyleSheet.create({
 
   // LEFT SIDE CARD
   mediaCard: {
-    width: "46%",
+    width: "45%",
   },
   mediaCover: {
     borderTopLeftRadius: 8,
@@ -430,7 +464,7 @@ const detailed = StyleSheet.create({
     marginBottom: SPACING,
   },
   mediaDetailsMainDescription: {
-    maxHeight: 100,
+    maxHeight: 110,
   },
 
   // BOTTOM INFORMATIONS
@@ -452,4 +486,4 @@ const detailed = StyleSheet.create({
   },
 });
 
-export default Media;
+export default MediaList;
