@@ -4,10 +4,10 @@ import { FontAwesome5 } from "@expo/vector-icons";
 
 // GRAPHQL
 import { useQuery } from "react-apollo";
-import { MEDIA_STATS } from "../services/media";
+import { MEDIA_STATS } from "../../services/media";
 
 // COMPONENTS
-import Loading from "./Loading";
+import Loading from "../Loading";
 import Details from "./Details";
 
 // VARIABLES

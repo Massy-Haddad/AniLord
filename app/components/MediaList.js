@@ -14,7 +14,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
 // COMPONENTS
-import Genres from "./Genres";
+import Genres from "./mediaDetails/Genres";
 
 const SPACING = 8;
 const regex = /(<([^>]+)>)/gi;

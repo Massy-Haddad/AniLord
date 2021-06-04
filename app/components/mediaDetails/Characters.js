@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,28 +10,30 @@ import {
 
 // GRAPHQL
 import { useQuery } from "react-apollo";
-import { MEDIA_STAFF } from "../services/media";
+import { MEDIA_CHARACTERS } from "../../services/media";
 
 // COMPONENTS
-import Loading from "./Loading";
+import Loading from "../Loading";
 
 // VARIABLES
 const SPACING = 8;
 
-function Staff(props) {
+function Characters(props) {
+  const [refreshing, setRefreshing] = useState(false);
+
   // GRAPHQL
-  const { loading, error, data, refetch } = useQuery(MEDIA_STAFF, {
-    variables: { id: props.mediaId, page: 1 },
+  const { loading, error, data, refetch } = useQuery(MEDIA_CHARACTERS, {
+    variables: { id: props.mediaId, page: 1, language: "JAPANESE" },
     suspend: false,
   });
 
   useEffect(() => {}, [loading, error, data, refetch]);
 
-  const renderItemStaff = ({ item }) => {
+  const renderItemCharacters = ({ item }) => {
     return (
       <View
         style={[
-          styles.staff,
+          styles.character,
           { backgroundColor: props.theme.PRIMARY_BUTTON_COLOR },
         ]}
       >
@@ -57,6 +59,28 @@ function Staff(props) {
             {item.role}
           </Text>
         </View>
+        <View style={styles.characterDetails}>
+          <Text
+            style={[
+              styles.characterDetailsName,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.voiceActorRoles[0]?.voiceActor?.name?.full}
+          </Text>
+          <Text
+            style={[
+              styles.characterDetailsOthers,
+              { color: props.theme.PRIMARY_BUTTON_TEXT_COLOR },
+            ]}
+          >
+            {item.voiceActorRoles[0]?.voiceActor?.language}
+          </Text>
+        </View>
+        <Image
+          style={styles.characterSeiyuuImage}
+          source={{ uri: item.voiceActorRoles[0]?.voiceActor?.image?.large }}
+        />
       </View>
     );
   };
@@ -73,13 +97,15 @@ function Staff(props) {
       ]}
     >
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* STAFF */}
-        <View style={styles.characters}>
+        {/* CHARACTERS */}
+        <View style={styles.characters.edges}>
           <FlatList
-            numColumns={2}
             showsVerticalScrollIndicator={false}
-            data={data.Media.staff.edges}
-            renderItem={renderItemStaff}
+            data={data.Media.characters.edges}
+            extraData={data}
+            renderItem={renderItemCharacters}
+            onRefresh={() => refetch}
+            refreshing={loading}
           />
         </View>
       </ScrollView>
@@ -96,21 +122,8 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
 
-  // STAFF
-  staff: {
-    flexDirection: "row",
-    height: 75,
-    borderRadius: 3,
-    marginBottom: SPACING * 3 - 2,
-    minWidth: "48%",
-    maxWidth: "48%",
-    marginRight: "4%",
-  },
-
   // CHARACTERS
-  characters: {
-    marginBottom: SPACING * 4 - 2,
-  },
+  characters: { marginBottom: SPACING * 4 - 2 },
   character: {
     flexDirection: "row",
     height: 85,
@@ -147,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Staff;
+export default Characters;

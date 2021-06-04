@@ -19,10 +19,10 @@ import { ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
 
 // COMPONENTS
-import Overview from "../components/Overview";
-import Characters from "../components/Characters";
-import Staff from "../components/Staff";
-import Stats from "../components/Stats";
+import Overview from "../components/mediaDetails/Overview";
+import Characters from "../components/mediaDetails/Characters";
+import Staff from "../components/mediaDetails/Staff";
+import Stats from "../components/mediaDetails/Stats";
 
 // NAVIGATION
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";

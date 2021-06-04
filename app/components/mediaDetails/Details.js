@@ -3,10 +3,10 @@ import { StyleSheet, View, Text, ScrollView } from "react-native";
 
 // GRAPHQL
 import { useQuery } from "react-apollo";
-import { MEDIA_GENERAL_INFORMATIONS } from "../services/media";
 
 // COMPONENTS
-import Loading from "./Loading";
+import Loading from "../Loading";
+import { MEDIA_GENERAL_INFORMATIONS } from "../../services/media";
 
 // VARIABLES
 const SPACING = 8;

@@ -10,8 +10,10 @@ import {
 
 // GRAPHQL
 import { useQuery } from "react-apollo";
-import { MEDIA_OVERVIEW } from "../services/media";
-import Loading from "./Loading";
+import { MEDIA_OVERVIEW } from "../../services/media";
+
+// COMPONENTS
+import Loading from "../Loading";
 import Details from "./Details";
 import Genres from "./Genres";
 
