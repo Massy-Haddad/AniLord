@@ -23,7 +23,7 @@ const { width, height } = Dimensions.get("screen");
 function CharacterList(props) {
   const [numColumns, setNumColumns] = useState(3);
 
-  useEffect(() => {}, [numColumns]);
+  useEffect(() => { }, [numColumns]);
 
   // Calculate the number of full rows and set invisible items so the last ones aren't invisible
   const formatData = (data, numColumns) => {
@@ -54,7 +54,7 @@ function CharacterList(props) {
       >
         <TouchableOpacity
           onPress={() => props.navigation.navigate("SearchScreen", { item })}
-          activeOpacity={0.8}
+          activeOpacity={0.5}
         >
           <SharedElement id={`item.${item.id}.image_url`}>
             <Image

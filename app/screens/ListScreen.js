@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { data } from "../config/data";
 import { SharedElement } from "react-navigation-shared-element";
 
 const { width } = Dimensions.get("screen");
